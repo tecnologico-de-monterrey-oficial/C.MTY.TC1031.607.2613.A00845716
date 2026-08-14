@@ -1,0 +1,35 @@
+{
+	"Create a standar CPP": {
+		"prefix": "cpp",
+		"body": [
+			"#include <iostream>",
+			"using namespace std;",
+			"",
+			"int main() {\n",
+			"    $1",
+			"\n",
+			"    return 0;",
+			"}"
+		],
+		"description": "C++ Template"
+	},
+	"Create a template<class T>": {
+		"prefix": "temp",
+		"body": [
+			"template <typename T>"
+		],
+		"description": "tempalte <typename T>"
+	},
+	"Create a standar class": {
+		"prefix": "ndef",
+		"body": [
+			"#ifndef $1",
+			"#define $1",
+			"\n",
+			"\n",
+			"\n",
+			"#endif /* $1 */",
+		],
+		"description": "C++ Class"
+	}
+}
