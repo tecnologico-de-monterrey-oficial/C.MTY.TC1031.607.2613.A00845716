@@ -33,3 +33,6 @@
 
 # Carpeta Tools
 /Tools
+
+# Node.js dependencies
+node_modules/
