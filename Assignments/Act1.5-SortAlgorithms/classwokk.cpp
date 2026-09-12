@@ -4,6 +4,12 @@
 using namespace std;
 
 
+// selection sort
+template <typename T>{
+    for (int i = 0; i<list.size()-1;i++
+}
+
+
 
 template <typename T>
 void insertionSort(vector<T>& arr) {
