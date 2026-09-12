@@ -1,0 +1,10 @@
+# Ejecutables compilados de esta actividad
+sortapp
+test_correctitud
+
+# Logs y salidas temporales
+*.log
+*.output
+
+# Cache de Python
+__pycache__/
