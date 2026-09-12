@@ -1,9 +1,7 @@
 // Diego Contreras
 // A00845716
 
-// Aqui se generan los vectores con datos aleatorios para las pruebas.
-// Se manejan 3 tipos: enteros (int), reales (double) y textos (string).
-// Usamos la libreria <random> de C++ moderno para los numeros al azar.
+// Genera vectores con datos al azar: int, double y string.
 
 #ifndef DATA_GENERATOR_H
 #define DATA_GENERATOR_H
@@ -14,15 +12,14 @@
 
 using namespace std;
 
-// Un solo generador de numeros al azar para todo el programa.
-// Se crea una vez y se reutiliza (asi los datos salen bien mezclados).
+// Un solo motor de numeros al azar para todo el programa.
 inline mt19937& generador() {
-    static random_device semilla;      // fuente de aleatoriedad del sistema
-    static mt19937 motor(semilla());   // motor de numeros aleatorios
+    static random_device semilla;
+    static mt19937 motor(semilla());
     return motor;
 }
 
-// Genera un vector de "n" numeros enteros al azar entre 0 y 1,000,000.
+// n enteros entre 0 y 1,000,000.
 inline vector<int> generarEnteros(int n) {
     vector<int> datos(n);
     uniform_int_distribution<int> rango(0, 1000000);
@@ -32,7 +29,7 @@ inline vector<int> generarEnteros(int n) {
     return datos;
 }
 
-// Genera un vector de "n" numeros reales (double) al azar entre 0 y 1,000,000.
+// n reales entre 0 y 1,000,000.
 inline vector<double> generarDoubles(int n) {
     vector<double> datos(n);
     uniform_real_distribution<double> rango(0.0, 1000000.0);
@@ -42,8 +39,7 @@ inline vector<double> generarDoubles(int n) {
     return datos;
 }
 
-// Genera un vector de "n" textos al azar.
-// Cada texto tiene entre 5 y 10 letras/numeros.
+// n textos al azar de 5 a 10 caracteres.
 inline vector<string> generarStrings(int n) {
     const string caracteres =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

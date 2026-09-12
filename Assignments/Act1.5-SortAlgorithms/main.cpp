@@ -1,9 +1,8 @@
 // Diego Contreras
 // A00845716
 
-// Programa principal: menu para generar vectores con datos al azar,
-// ordenarlos con distintos algoritmos, medir su tiempo (en nanosegundos)
-// y hacer una comparacion completa que se guarda en un CSV.
+// Menu para generar vectores al azar, ordenarlos, medir el tiempo
+// (en nanosegundos) y hacer la comparacion completa que se guarda en CSV.
 
 #include <iostream>
 #include <vector>
@@ -17,10 +16,7 @@
 
 using namespace std;
 
-// ------------------------------------------------------------------
-// Lectura segura de un numero entero dentro de un rango [min, max].
-// Si el usuario escribe algo que no es numero, se avisa y se repite.
-// ------------------------------------------------------------------
+// Lee un entero entre minimo y maximo. Si es invalido, lo vuelve a pedir.
 int leerOpcion(int minimo, int maximo, const string& mensaje) {
     int valor;
     while (true) {
@@ -28,7 +24,6 @@ int leerOpcion(int minimo, int maximo, const string& mensaje) {
         if (cin >> valor && valor >= minimo && valor <= maximo) {
             return valor;
         }
-        // limpiamos el error y descartamos lo que quedo escrito
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "  Entrada no valida. Escribe un numero entre "
@@ -36,17 +31,14 @@ int leerOpcion(int minimo, int maximo, const string& mensaje) {
     }
 }
 
-// Convierte la opcion de tamano (1,2,3) al numero real de elementos.
+// Pasa la opcion de tamano (1,2,3) al numero real de elementos.
 int tamanoElegido(int opcion) {
     if (opcion == 1) return 1000;
     if (opcion == 2) return 10000;
     return 100000;
 }
 
-// ------------------------------------------------------------------
-// Imprime un vector. Como pueden ser enormes, se pregunta como verlo:
-//   1) completo, 2) resumen (primeros y ultimos), 3) no mostrarlo.
-// ------------------------------------------------------------------
+// Muestra el vector: completo, resumido o sin mostrar.
 template <typename T>
 void mostrarVector(const vector<T>& lista) {
     cout << "\nComo quieres ver el vector ordenado?\n";
@@ -56,10 +48,7 @@ void mostrarVector(const vector<T>& lista) {
     int opcion = leerOpcion(1, 3, "Opcion: ");
 
     int n = static_cast<int>(lista.size());
-
-    if (opcion == 3) {
-        return;
-    }
+    if (opcion == 3) return;
 
     if (opcion == 1) {
         cout << "\nVector ordenado (" << n << " elementos):\n";
@@ -83,11 +72,7 @@ void mostrarVector(const vector<T>& lista) {
     }
 }
 
-// ------------------------------------------------------------------
-// Flujo para ordenar UN vector de un tipo dado.
-// Pasos: generar -> (cronometro) ordenar -> (parar) -> mostrar tiempo
-//        -> mostrar vector. La impresion NO entra en el tiempo medido.
-// ------------------------------------------------------------------
+// Ordena un vector: mide solo el ordenamiento y luego muestra el resultado.
 template <typename T>
 void ordenarIndividual(vector<T> datos, const string& nombreTipo) {
     cout << "\nElige el algoritmo de ordenamiento:\n";
@@ -98,15 +83,13 @@ void ordenarIndividual(vector<T> datos, const string& nombreTipo) {
 
     int n = static_cast<int>(datos.size());
 
-    // Aviso cuando la combinacion puede tardar mucho (algoritmos O(n^2)).
-    bool esLento = (algoritmo == 1 || algoritmo == 2 ||
-                    algoritmo == 3 || algoritmo == 4);
+    // Aviso si la combinacion es lenta (algoritmos O(n^2) con 100,000).
+    bool esLento = (algoritmo >= 1 && algoritmo <= 4);
     if (esLento && n >= 100000) {
         cout << "\n[AVISO] " << nombreAlgoritmo(algoritmo)
              << " con " << n << " elementos puede tardar bastante.\n";
         cout << "Deseas continuar? (1 = si, 2 = no): ";
-        int seguir = leerOpcion(1, 2, "");
-        if (seguir == 2) {
+        if (leerOpcion(1, 2, "") == 2) {
             cout << "Operacion cancelada.\n";
             return;
         }
@@ -115,7 +98,6 @@ void ordenarIndividual(vector<T> datos, const string& nombreTipo) {
     cout << "\nOrdenando " << n << " elementos de tipo " << nombreTipo
          << " con " << nombreAlgoritmo(algoritmo) << "...\n";
 
-    // Solo medimos el ordenamiento (no la generacion ni la impresion).
     auto inicio = chrono::high_resolution_clock::now();
     aplicarOrden(algoritmo, datos);
     auto fin = chrono::high_resolution_clock::now();
@@ -123,7 +105,6 @@ void ordenarIndividual(vector<T> datos, const string& nombreTipo) {
     long long nanos =
         chrono::duration_cast<chrono::nanoseconds>(fin - inicio).count();
 
-    // Primero el tiempo...
     cout << "\nTiempo de " << nombreAlgoritmo(algoritmo) << ": "
          << nanos << " nanosegundos\n";
     if (estaOrdenado(datos)) {
@@ -132,11 +113,10 @@ void ordenarIndividual(vector<T> datos, const string& nombreTipo) {
         cout << "Verificacion: ERROR, el vector NO quedo ordenado.\n";
     }
 
-    // ...y despues el vector (fuera de la medicion).
-    mostrarVector(datos);
+    mostrarVector(datos); // fuera de la medicion
 }
 
-// Menu para elegir tipo y tamano, y luego ordenar un vector individual.
+// Pide tipo y tamano, genera los datos y ordena.
 void menuOrdenarUno() {
     cout << "\nElige el tipo de dato:\n";
     cout << "  1) int (enteros)\n";
@@ -148,10 +128,8 @@ void menuOrdenarUno() {
     cout << "  1) 1,000\n";
     cout << "  2) 10,000\n";
     cout << "  3) 100,000\n";
-    int opcionTamano = leerOpcion(1, 3, "Opcion: ");
-    int n = tamanoElegido(opcionTamano);
+    int n = tamanoElegido(leerOpcion(1, 3, "Opcion: "));
 
-    // Generamos los datos (esto NO se mide).
     if (tipo == 1) {
         ordenarIndividual(generarEnteros(n), "int");
     } else if (tipo == 2) {
@@ -182,8 +160,7 @@ int main() {
             cout << "tipos de dato y los 3 tamanos (hasta 100,000).\n";
             cout << "Los algoritmos O(n^2) con 100,000 pueden tardar varios\n";
             cout << "minutos. Deseas continuar? (1 = si, 2 = no): ";
-            int seguir = leerOpcion(1, 2, "");
-            if (seguir == 1) {
+            if (leerOpcion(1, 2, "") == 1) {
                 analisisComparativo();
             } else {
                 cout << "Analisis cancelado.\n";

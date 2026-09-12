@@ -1,32 +1,23 @@
 // Diego Contreras
 // A00845716
 
-// Aqui estan los 7 algoritmos de ordenamiento hechos a mano.
-// Todos ordenan de menor a mayor (ascendente) y funcionan con
-// cualquier tipo de dato que se pueda comparar con <, gracias a
-// que estan hechos como plantillas (template).
+// Los 7 algoritmos de ordenamiento (ascendentes, hechos a mano).
 
 #ifndef SORTING_H
 #define SORTING_H
 
 #include <vector>
-#include <utility>   // para std::swap
-#include <algorithm> // solo para std::is_sorted (verificar, NO ordenar)
+#include <utility>
+#include <algorithm> // solo para is_sorted (verificar, no ordenar)
 
 using namespace std;
 
-// ------------------------------------------------------------------
-// 1. SWAP SORT
-// ------------------------------------------------------------------
-// Recorre el vector comparando cada elemento con todos los que estan
-// mas adelante. Si encuentra uno menor, los intercambia. Al final
-// cada posicion queda con el valor mas pequeno que le corresponde.
+// 1. Swap Sort: compara cada elemento con los de adelante e intercambia.
 template <typename T>
 void swapSort(vector<T>& lista) {
     int n = static_cast<int>(lista.size());
     for (int i = 0; i < n - 1; i++) {
         for (int j = i + 1; j < n; j++) {
-            // si el de adelante es menor, los cambiamos de lugar
             if (lista[j] < lista[i]) {
                 swap(lista[i], lista[j]);
             }
@@ -34,13 +25,7 @@ void swapSort(vector<T>& lista) {
     }
 }
 
-// ------------------------------------------------------------------
-// 2. BUBBLE SORT
-// ------------------------------------------------------------------
-// Compara pares de vecinos y los intercambia si estan en desorden.
-// Los valores grandes van "subiendo" hasta el final como burbujas.
-// Optimizacion: si en una pasada no hubo ningun intercambio, ya
-// esta ordenado y terminamos antes.
+// 2. Bubble Sort: sube el mayor comparando vecinos. Para si ya esta ordenado.
 template <typename T>
 void bubbleSort(vector<T>& lista) {
     int n = static_cast<int>(lista.size());
@@ -52,48 +37,34 @@ void bubbleSort(vector<T>& lista) {
                 huboCambio = true;
             }
         }
-        // si esta pasada no movio nada, el vector ya quedo ordenado
-        if (!huboCambio) {
-            break;
-        }
+        if (!huboCambio) break;
     }
 }
 
-// ------------------------------------------------------------------
-// 3. SELECTION SORT
-// ------------------------------------------------------------------
-// En cada vuelta busca el elemento mas pequeno de la parte que falta
-// por ordenar y lo coloca al inicio de esa parte.
+// 3. Selection Sort: busca el menor que falta y lo pone al inicio.
 template <typename T>
 void selectionSort(vector<T>& lista) {
     int n = static_cast<int>(lista.size());
     for (int i = 0; i < n - 1; i++) {
         int posMinimo = i;
-        // buscamos el menor desde i+1 hasta el final
         for (int j = i + 1; j < n; j++) {
             if (lista[j] < lista[posMinimo]) {
                 posMinimo = j;
             }
         }
-        // lo ponemos en su lugar
         if (posMinimo != i) {
             swap(lista[i], lista[posMinimo]);
         }
     }
 }
 
-// ------------------------------------------------------------------
-// 4. INSERTION SORT
-// ------------------------------------------------------------------
-// Toma un elemento a la vez y lo va "insertando" en el lugar correcto
-// de la parte que ya esta ordenada a su izquierda.
+// 4. Insertion Sort: inserta cada elemento en su lugar de la parte ordenada.
 template <typename T>
 void insertionSort(vector<T>& lista) {
     int n = static_cast<int>(lista.size());
     for (int i = 1; i < n; i++) {
         T actual = lista[i];
         int j = i - 1;
-        // corremos hacia la derecha los que sean mayores que "actual"
         while (j >= 0 && lista[j] > actual) {
             lista[j + 1] = lista[j];
             j--;
@@ -102,63 +73,35 @@ void insertionSort(vector<T>& lista) {
     }
 }
 
-// ------------------------------------------------------------------
-// 5. MERGE SORT
-// ------------------------------------------------------------------
-// Divide el vector en dos mitades, ordena cada mitad por separado
-// (recursivamente) y luego las mezcla en orden.
-
-// Funcion auxiliar: mezcla dos partes YA ordenadas del vector.
-// La parte izquierda va de "izq" a "medio" y la derecha de
-// "medio+1" a "der".
+// 5. Merge Sort. Mezcla dos partes ya ordenadas del vector.
 template <typename T>
 void merge(vector<T>& lista, int izq, int medio, int der) {
-    // copiamos cada mitad en un vector temporal
     vector<T> parteIzq(lista.begin() + izq, lista.begin() + medio + 1);
     vector<T> parteDer(lista.begin() + medio + 1, lista.begin() + der + 1);
 
-    int i = 0;          // indice para la parte izquierda
-    int j = 0;          // indice para la parte derecha
-    int k = izq;        // indice donde vamos escribiendo en el original
-
-    // vamos tomando el menor de las dos partes y lo colocamos
+    int i = 0, j = 0, k = izq;
     while (i < static_cast<int>(parteIzq.size()) &&
            j < static_cast<int>(parteDer.size())) {
         if (parteIzq[i] <= parteDer[j]) {
-            lista[k] = parteIzq[i];
-            i++;
+            lista[k++] = parteIzq[i++];
         } else {
-            lista[k] = parteDer[j];
-            j++;
+            lista[k++] = parteDer[j++];
         }
-        k++;
     }
-    // si sobraron elementos en alguna parte, se copian tal cual
-    while (i < static_cast<int>(parteIzq.size())) {
-        lista[k] = parteIzq[i];
-        i++;
-        k++;
-    }
-    while (j < static_cast<int>(parteDer.size())) {
-        lista[k] = parteDer[j];
-        j++;
-        k++;
-    }
+    while (i < static_cast<int>(parteIzq.size())) lista[k++] = parteIzq[i++];
+    while (j < static_cast<int>(parteDer.size())) lista[k++] = parteDer[j++];
 }
 
-// Version recursiva que trabaja con indices.
+// Divide en dos mitades, ordena cada una y las mezcla.
 template <typename T>
 void mergeSort(vector<T>& lista, int izq, int der) {
-    if (izq >= der) {
-        return; // 0 o 1 elemento: ya esta ordenado
-    }
+    if (izq >= der) return;
     int medio = izq + (der - izq) / 2;
-    mergeSort(lista, izq, medio);       // ordena mitad izquierda
-    mergeSort(lista, medio + 1, der);   // ordena mitad derecha
-    merge(lista, izq, medio, der);      // mezcla las dos mitades
+    mergeSort(lista, izq, medio);
+    mergeSort(lista, medio + 1, der);
+    merge(lista, izq, medio, der);
 }
 
-// Version comoda para llamar sin pasar indices.
 template <typename T>
 void mergeSort(vector<T>& lista) {
     if (lista.size() > 1) {
@@ -166,56 +109,40 @@ void mergeSort(vector<T>& lista) {
     }
 }
 
-// ------------------------------------------------------------------
-// 6. QUICK SORT
-// ------------------------------------------------------------------
-// Elige un valor de referencia (pivote), acomoda los menores a la
-// izquierda y los mayores a la derecha, y repite en cada lado.
-//
-// Para elegir el pivote usamos la "mediana de tres" (primero, medio
-// y ultimo). Esto evita que se vuelva muy lento y muy profundo cuando
-// los datos ya vienen ordenados o al reves.
-
-// Coloca en la ultima posicion un buen pivote (la mediana de tres).
+// 6. Quick Sort. Deja como pivote la mediana de tres (evita el peor caso).
 template <typename T>
 void elegirPivote(vector<T>& lista, int izq, int der) {
     int medio = izq + (der - izq) / 2;
-    // ordenamos entre si el primero, el de en medio y el ultimo
     if (lista[medio] < lista[izq]) swap(lista[izq], lista[medio]);
     if (lista[der] < lista[izq])   swap(lista[izq], lista[der]);
     if (lista[der] < lista[medio]) swap(lista[medio], lista[der]);
-    // dejamos la mediana (que quedo en "medio") justo antes del final
     swap(lista[medio], lista[der]);
 }
 
-// Particion: deja el pivote en su lugar definitivo y regresa su posicion.
+// Deja los menores a la izquierda del pivote y regresa su posicion.
 template <typename T>
 int particion(vector<T>& lista, int izq, int der) {
     elegirPivote(lista, izq, der);
-    T pivote = lista[der]; // el pivote quedo al final
-    int i = izq - 1;       // marca el limite de los menores al pivote
+    T pivote = lista[der];
+    int i = izq - 1;
     for (int j = izq; j < der; j++) {
         if (lista[j] <= pivote) {
-            i++;
-            swap(lista[i], lista[j]);
+            swap(lista[++i], lista[j]);
         }
     }
-    // colocamos el pivote justo despues de los menores
     swap(lista[i + 1], lista[der]);
     return i + 1;
 }
 
-// Version recursiva con indices.
 template <typename T>
 void quickSort(vector<T>& lista, int izq, int der) {
     if (izq < der) {
         int p = particion(lista, izq, der);
-        quickSort(lista, izq, p - 1);   // lado de los menores
-        quickSort(lista, p + 1, der);   // lado de los mayores
+        quickSort(lista, izq, p - 1);
+        quickSort(lista, p + 1, der);
     }
 }
 
-// Version comoda para llamar sin pasar indices.
 template <typename T>
 void quickSort(vector<T>& lista) {
     if (lista.size() > 1) {
@@ -223,17 +150,11 @@ void quickSort(vector<T>& lista) {
     }
 }
 
-// ------------------------------------------------------------------
-// 7. SHELL SORT  (algoritmo extra, no visto en clase)
-// ------------------------------------------------------------------
-// Es como el insertion sort pero comparando elementos separados por
-// un "salto" (gap) que empieza grande y se va reduciendo a la mitad.
-// Asi los valores llegan mas rapido a su zona correcta.
+// 7. Shell Sort (extra): insertion sort con saltos que se van reduciendo.
 template <typename T>
 void shellSort(vector<T>& lista) {
     int n = static_cast<int>(lista.size());
     for (int salto = n / 2; salto > 0; salto /= 2) {
-        // insertion sort usando el salto actual
         for (int i = salto; i < n; i++) {
             T actual = lista[i];
             int j = i;
@@ -246,12 +167,7 @@ void shellSort(vector<T>& lista) {
     }
 }
 
-// ------------------------------------------------------------------
-// Aplica el algoritmo indicado por su numero (1 a 7) sobre el vector.
-// Sirve para no repetir el mismo switch en varias partes del programa.
-//   1 = Swap, 2 = Bubble, 3 = Selection, 4 = Insertion,
-//   5 = Merge, 6 = Quick, 7 = Shell
-// ------------------------------------------------------------------
+// Aplica el algoritmo por su numero (1 a 7) para no repetir el switch.
 template <typename T>
 void aplicarOrden(int id, vector<T>& lista) {
     switch (id) {
@@ -265,10 +181,7 @@ void aplicarOrden(int id, vector<T>& lista) {
     }
 }
 
-// ------------------------------------------------------------------
-// Ayuda para verificar que un vector realmente quedo ordenado.
-// (Usamos is_sorted SOLO para comprobar, nunca para ordenar.)
-// ------------------------------------------------------------------
+// Verifica que el vector quedo ordenado.
 template <typename T>
 bool estaOrdenado(const vector<T>& lista) {
     return is_sorted(lista.begin(), lista.end());
