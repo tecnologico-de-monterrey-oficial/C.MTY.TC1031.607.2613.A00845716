@@ -39,6 +39,11 @@ Tiempos medidos en mi Mac, con `-O2`, sobre los mismos 6,818 registros:
 | Shell sort | 7.818 | 5.422 |
 | Quick sort (pivote al final) | 1.193 | 38.057 |
 
+**Aclaración sobre la opción 8.** Los siete primeros algoritmos son los vistos en
+clase hasta la Act 1.5. El octavo, quick sort con pivote al final, no es un algoritmo
+de clase: lo agregué yo como experimento para poder comparar las dos formas de elegir
+pivote. La versión oficial de la actividad es la 5, con mediana de tres.
+
 ### Por qué selection sort tardó casi lo mismo en los dos archivos
 
 Selection sort siempre recorre toda la parte que le falta para encontrar el mínimo,
@@ -93,6 +98,22 @@ todas las operaciones cuestan igual, y aquí no es cierto: una comparación es b
 bajó de 141.740 ms a 25.652 ms, 5.5 veces más rápido, sin tocar la lógica. No lo
 dejé en el proyecto porque el código tiene que ser el que vimos en clase, pero vale
 la pena mencionarlo.
+
+### De dónde salió esta medición, para el tema de uso de IA
+
+La expectativa con la que empecé decía que insertion sort tardaría unos 17 ms en
+log607-1 y bubble unos 54 ms, o sea que insertion ganaría por mucho. Al medirlo salió
+al revés: 141.740 ms contra 101.155 ms.
+
+Resultó que esa expectativa venía de medir una versión de insertion sort que usaba
+`std::move`, no la versión de clase que copia. O sea que la comparación no era entre
+dos algoritmos, era entre dos formas de mover los datos.
+
+Esto cubre dos cosas a la vez. Es un resultado que no coincidió con la predicción y
+que se explica con algo que la notación O grande no ve, porque O grande supone que
+todas las operaciones cuestan lo mismo. Y es un caso real de una expectativa
+equivocada que solo se detectó al medir y al aislar la variable, ordenando los
+mismos datos sin el string.
 
 ### Qué algoritmos cambiaron el orden de los registros con fecha repetida
 

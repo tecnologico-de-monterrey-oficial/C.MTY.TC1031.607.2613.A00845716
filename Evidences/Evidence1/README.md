@@ -56,6 +56,24 @@ El programa solo termina con la opción 0 o presionando Ctrl + D, que cierra la 
 
 Los mensajes de la consola no llevan acentos a propósito, para que se muestren correctamente en cualquier terminal, incluida la de Windows. Los comentarios del código sí los llevan.
 
+## Algoritmos de ordenamiento
+
+El menú ofrece ocho opciones. Las siete primeras son los algoritmos vistos en clase hasta la Actividad 1.5, incluido Shell Sort, que fue el algoritmo extra de esa actividad:
+
+1. Bubble sort, con bandera que corta las pasadas cuando ya no hay intercambios.
+2. Selection sort.
+3. Insertion sort.
+4. Merge sort, con un solo vector auxiliar reutilizado en toda la recursión.
+5. Quick sort con pivote por mediana de tres, tal como se implementó en la Act 1.5.
+6. Swap sort.
+7. Shell sort, el algoritmo extra de la Act 1.5.
+
+**La opción 8, Quick sort con pivote al final, no es un algoritmo visto en clase.** Es un experimento propio que se agregó únicamente para comparar: elige siempre el último elemento como pivote, sin mediana, y sirve para demostrar cómo quick sort se degrada con datos casi ordenados y por qué existe la mejora de la mediana de tres. No sustituye a la opción 5, que es la versión oficial de la actividad.
+
+Todos los algoritmos son plantillas que ordenan de menor a mayor comparando únicamente con `<`, y reciben los registros a través del operador `<` definido sobre la fecha.
+
+Insertion sort y merge sort son estables, es decir, dos registros con la misma fecha y hora conservan el orden en que venían en el archivo. Los demás no lo son.
+
 ## Archivos de salida
 
 Después de cada ordenamiento el programa escribe `out/output607.txt` con los registros ordenados cronológicamente, en el mismo formato que el archivo de entrada. El archivo se sobrescribe en cada corrida, así que siempre contiene el resultado de la corrida más reciente.
