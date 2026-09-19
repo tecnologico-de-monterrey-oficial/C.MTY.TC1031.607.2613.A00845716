@@ -12,19 +12,12 @@
 #include "registro.h"
 #include "entrada.h"
 #include "ordenamientos.h"
+#include "corridas.h"
 
 // Los dos archivos que se pueden analizar.
 const std::string RUTAS[2]   = {"data/log607-1.txt", "data/log607-2.txt"};
 const std::string NOMBRES[2] = {"log607-1.txt (desordenado)", "log607-2.txt (casi ordenado)"};
-
-// Los algoritmos que puede elegir el usuario. Los primeros siete son los de la
-// Act 1.5. El octavo es una variante de quick sort que sirve para comparar.
-const int NUM_ALGORITMOS = 8;
-const std::string ALGORITMOS[NUM_ALGORITMOS] = {
-    "Bubble sort", "Selection sort", "Insertion sort", "Merge sort",
-    "Quick sort (mediana de tres)", "Swap sort", "Shell sort",
-    "Quick sort (pivote al final)"
-};
+const std::string NOMBRES_CORTOS[2] = {"log607-1.txt", "log607-2.txt"};
 
 // Ejecuta el algoritmo que corresponde a la opcion del menu.
 void ejecutarAlgoritmo(int opcion, std::vector<Registro>& v) {
@@ -55,6 +48,7 @@ int main() {
     std::vector<Registro> original;   // los datos tal como vienen del archivo
     std::vector<Registro> ordenados;  // resultado de la ultima corrida, es lo que usa la busqueda
     std::string archivoActual = "";   // cuál archivo está cargado
+    std::string archivoCorto = "";    // el mismo nombre pero sin la descripción
     bool hayOrdenado = false;         // se vuelve true en la Fase 3 al ordenar
 
     while (true) {
@@ -85,6 +79,7 @@ int main() {
             }
 
             archivoActual = NOMBRES[cual - 1];
+            archivoCorto = NOMBRES_CORTOS[cual - 1];
             // Los datos recien cargados vienen como estan en el archivo, sin ordenar.
             hayOrdenado = false;
 
@@ -94,7 +89,7 @@ int main() {
             // Submenu de algoritmos. En la Fase 4 se le agregan los demas.
             std::cout << "\nQue algoritmo quieres usar?" << std::endl;
             for (int i = 0; i < NUM_ALGORITMOS; i++) {
-                std::cout << (i + 1) << ". " << ALGORITMOS[i] << std::endl;
+                std::cout << (i + 1) << ". " << infoAlgoritmo(i + 1).nombre << std::endl;
             }
             std::cout << "0. Regresar al menu" << std::endl;
 
@@ -102,6 +97,16 @@ int main() {
             if (algoritmo == 0) {
                 continue;
             }
+
+            const InfoAlgoritmo& info = infoAlgoritmo(algoritmo);
+
+            std::cout << "\nVas a ordenar " << original.size() << " registros de "
+                      << archivoActual << " con " << info.nombre << "." << std::endl;
+
+            // La prediccion se pide antes de empezar a medir. Si se pidiera en medio,
+            // el tiempo que tarda el usuario en escribir contaria como tiempo del algoritmo.
+            std::string razon = "";
+            int prediccion = pedirPrediccion(razon);
 
             // Siempre se ordena una copia de los datos como vienen del archivo.
             // La copia se hace antes de empezar a medir, porque copiar no es parte
@@ -123,16 +128,40 @@ int main() {
             ordenados = copia;
             hayOrdenado = true;
 
+            int resultado = clasificarTiempo(ms);
+
             std::cout << "\n----------------------------------------" << std::endl;
-            std::cout << "Algoritmo: " << ALGORITMOS[algoritmo - 1] << std::endl;
-            std::cout << "Archivo:   " << archivoActual << std::endl;
-            std::cout << "Registros: " << ordenados.size() << std::endl;
-            std::cout << "Tiempo:    " << std::fixed << std::setprecision(3)
+            std::cout << "Algoritmo:    " << info.nombre << std::endl;
+            std::cout << "Archivo:      " << archivoActual << std::endl;
+            std::cout << "Registros:    " << ordenados.size() << std::endl;
+            std::cout << "Tiempo:       " << std::fixed << std::setprecision(3)
                       << ms << " ms" << std::endl;
+            std::cout << "Complejidad:  mejor caso " << info.mejorCaso
+                      << ", peor caso " << info.peorCaso << std::endl;
+            std::cout << "Estable:      " << (info.estable ? "si" : "no") << std::endl;
+            std::cout << "Prediccion:   " << nombreCategoria(prediccion) << std::endl;
+            std::cout << "Resultado:    " << nombreCategoria(resultado) << std::endl;
+            std::cout << "Coincidio:    " << (prediccion == resultado ? "si" : "no")
+                      << std::endl;
             std::cout << "Verificacion: datos ordenados correctamente" << std::endl;
 
             if (escribirArchivo("out/output607.txt", ordenados)) {
                 std::cout << "Salida guardada en out/output607.txt" << std::endl;
+            }
+
+            Corrida corrida;
+            corrida.algoritmo  = info.nombre;
+            corrida.archivo    = archivoCorto;
+            corrida.registros  = (int)ordenados.size();
+            corrida.ms         = ms;
+            corrida.mejorCaso  = info.mejorCaso;
+            corrida.peorCaso   = info.peorCaso;
+            corrida.prediccion = prediccion;
+            corrida.resultado  = resultado;
+            corrida.razon      = razon;
+
+            if (guardarCorrida(corrida, "out/corridas.csv")) {
+                std::cout << "Corrida guardada en out/corridas.csv" << std::endl;
             }
             std::cout << "----------------------------------------" << std::endl;
             continue;
@@ -152,7 +181,7 @@ int main() {
         }
 
         if (opcion == 3) {
-            std::cout << "Historial pendiente (Fase 5)." << std::endl;
+            mostrarHistorial("out/corridas.csv");
             continue;
         }
     }

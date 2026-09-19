@@ -1,0 +1,5 @@
+fecha,algoritmo,archivo,registros,tiempo_ms,mejor_caso,peor_caso,prediccion,resultado,coincidio,razon
+2026-09-19 13:22:24,Bubble sort,log607-1.txt,6818,102.554,O(n),O(n^2),lento,lento,si,"el archivo tiene 6818 registros y viene muy desordenado, bubble hace muchas pasadas"
+2026-09-19 13:22:32,Insertion sort,log607-2.txt,6818,1.204,O(n),O(n^2),medio,rapido,no,"el archivo ya viene casi ordenado asi que insertion deberia hacer pocos movimientos"
+2026-09-19 13:22:32,Merge sort,log607-2.txt,6818,4.438,O(n log n),O(n log n),rapido,rapido,si,"es rapido, porque ""casi"" esta ordenado"
+2026-09-19 13:22:32,Shell sort,log607-1.txt,6818,7.402,O(n log n),O(n^2),rapido,rapido,si,"una razon de verdad"
