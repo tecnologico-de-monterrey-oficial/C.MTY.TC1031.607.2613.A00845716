@@ -25,7 +25,7 @@ int mesANumero(const std::string& mes) {
 }
 
 // Quita los espacios de los extremos del texto.
-static std::string limpiarEspacios(const std::string& texto) {
+std::string limpiarEspacios(const std::string& texto) {
     int inicio = 0;
     int fin = (int)texto.size() - 1;
     while (inicio <= fin && isspace((unsigned char)texto[inicio])) {

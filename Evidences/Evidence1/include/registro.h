@@ -12,6 +12,7 @@ struct Registro {
     std::string linea;  // la línea original completa
 };
 
+std::string limpiarEspacios(const std::string& texto);
 int mesANumero(const std::string& mes);
 bool fechaAClave(const std::string& texto, long long& clave);
 bool parsearLinea(const std::string& linea, Registro& reg);
