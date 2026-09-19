@@ -192,6 +192,29 @@ void swapSort(std::vector<T>& v) {
     }
 }
 
+// Shell sort (el algoritmo extra de la Act 1.5): es un insertion sort que en vez
+// de comparar vecinos compara elementos separados por un salto que se va
+// reduciendo a la mitad. Los saltos grandes mueven de golpe los elementos que
+// estan muy lejos de su lugar, y cuando el salto llega a 1 ya queda poco por
+// acomodar. No es estable, porque los saltos brincan elementos.
+template <class T>
+void shellSort(std::vector<T>& v) {
+    int n = (int)v.size();
+
+    for (int salto = n / 2; salto > 0; salto /= 2) {
+        for (int i = salto; i < n; i++) {
+            T actual = v[i];
+            int j = i;
+
+            while (j >= salto && actual < v[j - salto]) {
+                v[j] = v[j - salto];
+                j -= salto;
+            }
+            v[j] = actual;
+        }
+    }
+}
+
 // Revisa que el vector quedo de menor a mayor. Sirve para comprobar
 // que el algoritmo funciono, no es una opcion del usuario.
 template <class T>
