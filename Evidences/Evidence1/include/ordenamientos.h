@@ -127,6 +127,54 @@ void mergeSort(std::vector<T>& v) {
     mergeSortRec(v, aux, 0, (int)v.size() - 1);
 }
 
+// Acomoda el primero, el de en medio y el ultimo, y deja la mediana de los tres
+// al final para usarla como pivote. Esto evita que el pivote sea casi siempre el
+// mayor del pedazo, que es lo que hace lento a quick sort con datos casi ordenados.
+template <class T>
+void elegirPivote(std::vector<T>& v, int izq, int der) {
+    int medio = izq + (der - izq) / 2;
+    if (v[medio] < v[izq]) std::swap(v[izq], v[medio]);
+    if (v[der] < v[izq])   std::swap(v[izq], v[der]);
+    if (v[der] < v[medio]) std::swap(v[medio], v[der]);
+    std::swap(v[medio], v[der]);
+}
+
+// Deja los menores a la izquierda del pivote y regresa la posicion final del pivote.
+template <class T>
+int particion(std::vector<T>& v, int izq, int der) {
+    elegirPivote(v, izq, der);
+    T pivote = v[der];
+    int i = izq - 1;
+
+    for (int j = izq; j < der; j++) {
+        // Equivale a "v[j] <= pivote" pero escrito solo con menor que.
+        if (!(pivote < v[j])) {
+            std::swap(v[++i], v[j]);
+        }
+    }
+    std::swap(v[i + 1], v[der]);
+    return i + 1;
+}
+
+template <class T>
+void quickSortRec(std::vector<T>& v, int izq, int der) {
+    if (izq < der) {
+        int p = particion(v, izq, der);
+        quickSortRec(v, izq, p - 1);
+        quickSortRec(v, p + 1, der);
+    }
+}
+
+// Quick sort con pivote por mediana de tres, igual que en la Act 1.5.
+// No es estable: la particion mueve elementos a saltos, asi que dos registros
+// con la misma fecha pueden terminar al reves.
+template <class T>
+void quickSort(std::vector<T>& v) {
+    if (v.size() > 1) {
+        quickSortRec(v, 0, (int)v.size() - 1);
+    }
+}
+
 // Revisa que el vector quedo de menor a mayor. Sirve para comprobar
 // que el algoritmo funciono, no es una opcion del usuario.
 template <class T>
