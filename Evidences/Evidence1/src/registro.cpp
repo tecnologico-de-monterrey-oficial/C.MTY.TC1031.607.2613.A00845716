@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cctype>
 
-// Los tres primeros meses del ano van en el mismo orden que en el log.
+// Los meses van en orden, así la posición en el arreglo más 1 es el número del mes.
 static const std::string MESES[12] = {
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -47,6 +47,18 @@ static bool sonDigitos(const std::string& texto, int desde, int cuantos) {
     return true;
 }
 
+// Regresa cuántos días tiene un mes, considerando años bisiestos.
+static int diasDelMes(int mes, int anio) {
+    if (mes == 2) {
+        bool bisiesto = (anio % 4 == 0 && anio % 100 != 0) || anio % 400 == 0;
+        return bisiesto ? 29 : 28;
+    }
+    if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
+        return 30;
+    }
+    return 31;
+}
+
 // Toma "Oct 02 2024 23:04:24", lo valida y arma la clave 20241002230424.
 // Regresa false si la fecha no sirve, y en ese caso no toca la clave.
 bool fechaAClave(const std::string& texto, long long& clave) {
@@ -80,12 +92,12 @@ bool fechaAClave(const std::string& texto, long long& clave) {
     int seg  = std::stoi(f.substr(18, 2));
 
     // Cada parte tiene que caer en su rango valido.
-    if (dia < 1 || dia > 31)   return false;
+    if (dia < 1 || dia > diasDelMes(mes, anio)) return false;
     if (hora < 0 || hora > 23) return false;
     if (min < 0 || min > 59)   return false;
     if (seg < 0 || seg > 59)   return false;
 
-    // El ano va primero para que pese mas que el mes, el mes mas que el dia, y asi.
+    // El año va primero para que pese más que el mes, el mes más que el día, y así.
     clave = (long long)anio * 10000000000LL
           + (long long)mes  * 100000000LL
           + (long long)dia  * 1000000LL

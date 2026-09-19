@@ -3,3 +3,4 @@ Oct 02 2024 23:04:24 10.14.47.219 Social engineering attacks
 Foo 32 2025 25:61:00 10.14.1.1 Fecha imposible
 esto no es una linea de log
 Sep 08 2024 00:22:43 10.14.168.155 Unencrypted communication
+Feb 30 2025 10:00:00 10.14.1.1 Fecha inexistente
