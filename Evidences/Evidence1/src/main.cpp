@@ -7,8 +7,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <chrono>
+#include <iomanip>
 #include "registro.h"
 #include "entrada.h"
+#include "ordenamientos.h"
 
 // Los dos archivos que se pueden analizar.
 const std::string RUTAS[2]   = {"data/log607-1.txt", "data/log607-2.txt"};
@@ -27,6 +30,7 @@ void mostrarMenu() {
 
 int main() {
     std::vector<Registro> original;   // los datos tal como vienen del archivo
+    std::vector<Registro> ordenados;  // resultado de la ultima corrida, es lo que usa la busqueda
     std::string archivoActual = "";   // cuál archivo está cargado
     bool hayOrdenado = false;         // se vuelve true en la Fase 3 al ordenar
 
@@ -63,7 +67,49 @@ int main() {
 
             std::cout << "Se cargaron " << original.size() << " registros de "
                       << archivoActual << "." << std::endl;
-            std::cout << "Ordenamiento pendiente (Fase 3)." << std::endl;
+
+            // Submenu de algoritmos. En la Fase 4 se le agregan los demas.
+            std::cout << "\nQue algoritmo quieres usar?" << std::endl;
+            std::cout << "1. Bubble sort" << std::endl;
+            std::cout << "0. Regresar al menu" << std::endl;
+
+            int algoritmo = leerEntero("Algoritmo: ", 0, 1);
+            if (algoritmo == 0) {
+                continue;
+            }
+
+            // Siempre se ordena una copia de los datos como vienen del archivo.
+            // La copia se hace antes de empezar a medir, porque copiar no es parte
+            // del algoritmo. Asi cada corrida arranca con los mismos datos y los
+            // tiempos se pueden comparar entre si.
+            std::vector<Registro> copia = original;
+
+            auto inicio = std::chrono::steady_clock::now();
+            bubbleSort(copia);
+            auto fin = std::chrono::steady_clock::now();
+
+            double ms = std::chrono::duration<double, std::milli>(fin - inicio).count();
+
+            if (!estaOrdenado(copia)) {
+                std::cout << "Error: el algoritmo no ordeno correctamente." << std::endl;
+                continue;
+            }
+
+            ordenados = copia;
+            hayOrdenado = true;
+
+            std::cout << "\n----------------------------------------" << std::endl;
+            std::cout << "Algoritmo: Bubble sort" << std::endl;
+            std::cout << "Archivo:   " << archivoActual << std::endl;
+            std::cout << "Registros: " << ordenados.size() << std::endl;
+            std::cout << "Tiempo:    " << std::fixed << std::setprecision(3)
+                      << ms << " ms" << std::endl;
+            std::cout << "Verificacion: datos ordenados correctamente" << std::endl;
+
+            if (escribirArchivo("out/output607.txt", ordenados)) {
+                std::cout << "Salida guardada en out/output607.txt" << std::endl;
+            }
+            std::cout << "----------------------------------------" << std::endl;
             continue;
         }
 
@@ -75,7 +121,8 @@ int main() {
                           << std::endl;
                 continue;
             }
-            std::cout << "Busqueda pendiente (Fase 6)." << std::endl;
+            std::cout << "Busqueda pendiente (Fase 6). Hay " << ordenados.size()
+                      << " registros ordenados listos." << std::endl;
             continue;
         }
 

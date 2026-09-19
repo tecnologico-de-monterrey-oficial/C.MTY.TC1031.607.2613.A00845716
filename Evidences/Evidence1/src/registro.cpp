@@ -178,3 +178,22 @@ bool leerArchivo(const std::string& ruta, std::vector<Registro>& datos) {
     }
     return true;
 }
+
+// Escribe los registros en un archivo, una linea por registro.
+// Guarda la linea original tal cual para que la salida tenga el mismo
+// formato que la entrada, sin volver a armarla campo por campo.
+bool escribirArchivo(const std::string& ruta, const std::vector<Registro>& datos) {
+    std::ofstream archivo(ruta);
+    if (!archivo.is_open()) {
+        std::cout << "Error: no se pudo crear el archivo \"" << ruta << "\"." << std::endl;
+        std::cout << "Revisa que la carpeta exista." << std::endl;
+        return false;
+    }
+
+    for (const Registro& reg : datos) {
+        archivo << reg.linea << '\n';
+    }
+
+    archivo.close();
+    return true;
+}

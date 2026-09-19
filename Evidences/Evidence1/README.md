@@ -56,6 +56,14 @@ El programa solo termina con la opción 0 o presionando Ctrl + D, que cierra la 
 
 Los mensajes de la consola no llevan acentos a propósito, para que se muestren correctamente en cualquier terminal, incluida la de Windows. Los comentarios del código sí los llevan.
 
+## Archivos de salida
+
+Después de cada ordenamiento el programa escribe `out/output607.txt` con los registros ordenados cronológicamente, en el mismo formato que el archivo de entrada. El archivo se sobrescribe en cada corrida, así que siempre contiene el resultado de la corrida más reciente.
+
+Cada corrida ordena una copia de los datos tal como vienen del archivo, de modo que el tiempo medido no depende de las corridas anteriores. Los datos originales nunca se modifican.
+
+Antes de guardar, el programa comprueba que el vector quedó de menor a mayor. Si la comprobación falla, avisa y no marca los datos como ordenados, así la búsqueda no puede correr sobre un resultado malo.
+
 ## Búsqueda por rango y manejo de duplicados
 
 (Pendiente, Fase 6)
