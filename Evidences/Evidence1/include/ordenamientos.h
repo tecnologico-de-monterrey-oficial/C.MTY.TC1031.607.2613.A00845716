@@ -175,6 +175,23 @@ void quickSort(std::vector<T>& v) {
     }
 }
 
+// Swap sort: compara cada posicion con todas las de adelante e intercambia.
+// Siempre hace la misma cantidad de comparaciones, sin importar como vengan los
+// datos. Con un archivo casi ordenado mejora un poco porque hace menos
+// intercambios, pero compara exactamente igual. No es estable.
+template <class T>
+void swapSort(std::vector<T>& v) {
+    int n = (int)v.size();
+
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (v[j] < v[i]) {
+                std::swap(v[i], v[j]);
+            }
+        }
+    }
+}
+
 // Revisa que el vector quedo de menor a mayor. Sirve para comprobar
 // que el algoritmo funciono, no es una opcion del usuario.
 template <class T>
