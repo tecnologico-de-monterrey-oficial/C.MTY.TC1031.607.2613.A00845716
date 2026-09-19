@@ -41,7 +41,18 @@ Si el archivo no se puede abrir, el programa avisa con la ruta que intentó abri
 
 ## Uso del programa
 
-(Pendiente, Fases 2 a 7)
+Al ejecutar el programa aparece un menú con cuatro opciones:
+
+1. **Ordenar un archivo.** Permite elegir entre log607-1.txt (desordenado) y log607-2.txt (casi ordenado) y carga sus registros.
+2. **Buscar por rango de fechas.** Solo está disponible después de ordenar, porque la búsqueda binaria necesita datos ordenados.
+3. **Ver historial de corridas.**
+0. **Salir.**
+
+Todas las opciones se eligen escribiendo el número y presionando Enter. Si se escribe algo que no es un número válido, que queda fuera del rango o que viene vacío, el programa explica qué se esperaba y vuelve a preguntar, sin cerrarse.
+
+Cada vez que se carga un archivo, los datos quedan sin ordenar, así que la búsqueda vuelve a bloquearse hasta que se ordene de nuevo.
+
+El programa solo termina con la opción 0 o presionando Ctrl + D, que cierra la entrada.
 
 ## Búsqueda por rango y manejo de duplicados
 
