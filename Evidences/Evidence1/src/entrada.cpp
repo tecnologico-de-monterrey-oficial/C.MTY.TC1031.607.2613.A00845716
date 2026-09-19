@@ -28,7 +28,7 @@ int leerEntero(const std::string& mensaje, int min, int max) {
         std::string texto = leerLinea(mensaje);
 
         if (texto.empty()) {
-            std::cout << "Entrada inválida. Escribe un número entre " << min
+            std::cout << "Entrada invalida. Escribe un numero entre " << min
                       << " y " << max << "." << std::endl;
             continue;
         }
@@ -42,21 +42,21 @@ int leerEntero(const std::string& mensaje, int min, int max) {
             }
         }
         if (!soloDigitos) {
-            std::cout << "Entrada inválida. Escribe un número entre " << min
+            std::cout << "Entrada invalida. Escribe un numero entre " << min
                       << " y " << max << "." << std::endl;
             continue;
         }
 
         // Un numero de mas de 9 digitos no cabe en un int y haria que stoi truene.
         if (texto.size() > 9) {
-            std::cout << "Ese número es demasiado grande. Escribe un número entre "
+            std::cout << "Ese numero es demasiado grande. Escribe un numero entre "
                       << min << " y " << max << "." << std::endl;
             continue;
         }
 
         int valor = std::stoi(texto);
         if (valor < min || valor > max) {
-            std::cout << "Entrada inválida. Escribe un número entre " << min
+            std::cout << "Entrada invalida. Escribe un numero entre " << min
                       << " y " << max << "." << std::endl;
             continue;
         }
@@ -70,7 +70,7 @@ std::string leerTextoNoVacio(const std::string& mensaje) {
     while (true) {
         std::string texto = leerLinea(mensaje);
         if (texto.empty()) {
-            std::cout << "El texto no puede ir vacío, intenta de nuevo." << std::endl;
+            std::cout << "El texto no puede ir vacio, intenta de nuevo." << std::endl;
             continue;
         }
         return texto;

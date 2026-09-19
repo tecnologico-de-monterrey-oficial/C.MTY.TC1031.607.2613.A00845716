@@ -54,6 +54,8 @@ Cada vez que se carga un archivo, los datos quedan sin ordenar, así que la bús
 
 El programa solo termina con la opción 0 o presionando Ctrl + D, que cierra la entrada.
 
+Los mensajes de la consola no llevan acentos a propósito, para que se muestren correctamente en cualquier terminal, incluida la de Windows. Los comentarios del código sí los llevan.
+
 ## Búsqueda por rango y manejo de duplicados
 
 (Pendiente, Fase 6)

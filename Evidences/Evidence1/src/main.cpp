@@ -32,7 +32,7 @@ int main() {
 
     while (true) {
         mostrarMenu();
-        int opcion = leerEntero("Opción: ", 0, 3);
+        int opcion = leerEntero("Opcion: ", 0, 3);
 
         if (opcion == 0) {
             std::cout << "Hasta luego." << std::endl;
@@ -41,10 +41,10 @@ int main() {
 
         if (opcion == 1) {
             // Submenu para escoger cual de los dos archivos se carga.
-            std::cout << "\n¿Qué archivo quieres usar?" << std::endl;
+            std::cout << "\nQue archivo quieres usar?" << std::endl;
             std::cout << "1. " << NOMBRES[0] << std::endl;
             std::cout << "2. " << NOMBRES[1] << std::endl;
-            std::cout << "0. Regresar al menú" << std::endl;
+            std::cout << "0. Regresar al menu" << std::endl;
 
             int cual = leerEntero("Archivo: ", 0, 2);
             if (cual == 0) {
@@ -70,12 +70,12 @@ int main() {
         if (opcion == 2) {
             // La busqueda binaria da resultados falsos si los datos no estan ordenados.
             if (!hayOrdenado) {
-                std::cout << "Primero ordena un archivo con la opción 1. "
-                          << "La búsqueda binaria solo funciona sobre datos ordenados."
+                std::cout << "Primero ordena un archivo con la opcion 1. "
+                          << "La busqueda binaria solo funciona sobre datos ordenados."
                           << std::endl;
                 continue;
             }
-            std::cout << "Búsqueda pendiente (Fase 6)." << std::endl;
+            std::cout << "Busqueda pendiente (Fase 6)." << std::endl;
             continue;
         }
 
