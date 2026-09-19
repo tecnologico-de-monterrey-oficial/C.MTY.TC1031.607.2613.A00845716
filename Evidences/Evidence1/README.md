@@ -27,7 +27,17 @@ Desde la carpeta `Evidences/Evidence1`:
 
 ## Formato de los datos
 
-(Pendiente, Fase 1)
+Cada línea del log tiene el formato:
+
+    Mmm dd aaaa hh:mm:ss IP mensaje
+
+Por ejemplo `Oct 02 2024 23:04:24 10.14.47.219 Social engineering attacks`. El mensaje puede contener espacios.
+
+Para ordenar y buscar, la fecha se convierte en un número con el formato AAAAMMDDhhmmss (en el ejemplo, 20241002230424), así comparar dos fechas es comparar dos números. El programa conserva la línea original completa para que los archivos de salida tengan exactamente el mismo formato que la entrada.
+
+Las líneas vacías o con formato inválido se reportan en pantalla con su número de línea y se ignoran, sin detener la lectura del resto del archivo. El archivo `data/prueba-malformada.txt` sirve para comprobar ese comportamiento: tiene 5 líneas, de las cuales 2 son registros válidos y 3 se reportan.
+
+Si el archivo no se puede abrir, el programa avisa con la ruta que intentó abrir y no se cierra de forma inesperada.
 
 ## Uso del programa
 

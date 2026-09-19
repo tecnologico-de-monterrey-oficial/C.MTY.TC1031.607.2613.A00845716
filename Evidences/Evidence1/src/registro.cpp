@@ -94,3 +94,75 @@ bool fechaAClave(const std::string& texto, long long& clave) {
           + (long long)seg;
     return true;
 }
+
+// Toma una linea del log, saca la fecha de los primeros 20 caracteres y
+// guarda la clave junto con la linea completa. Regresa false si la linea no sirve.
+bool parsearLinea(const std::string& linea, Registro& reg) {
+    // Tiene que haber fecha (20 caracteres) y algo despues: la IP y el mensaje.
+    if (linea.size() <= 21) {
+        return false;
+    }
+
+    long long clave = 0;
+    if (!fechaAClave(linea.substr(0, 20), clave)) {
+        return false;
+    }
+
+    // Despues de la fecha va un espacio y luego el resto de los datos.
+    if (linea[20] != ' ' || limpiarEspacios(linea.substr(21)).empty()) {
+        return false;
+    }
+
+    reg.clave = clave;
+    reg.linea = linea;
+    return true;
+}
+
+// Abre el archivo y guarda cada linea valida en el vector.
+// Las lineas rotas se avisan con su numero y se saltan, sin detener la lectura.
+bool leerArchivo(const std::string& ruta, std::vector<Registro>& datos) {
+    std::ifstream archivo(ruta);
+    if (!archivo.is_open()) {
+        std::cout << "Error: no se pudo abrir el archivo \"" << ruta << "\"." << std::endl;
+        std::cout << "Revisa que exista y que lo estes corriendo desde la carpeta Evidence1."
+                  << std::endl;
+        return false;
+    }
+
+    std::string linea;
+    int numeroLinea = 0;
+    int ignoradas = 0;
+
+    while (std::getline(archivo, linea)) {
+        numeroLinea++;
+
+        // Si el archivo viene de Windows cada linea termina en \r y hay que quitarlo.
+        if (!linea.empty() && linea.back() == '\r') {
+            linea.pop_back();
+        }
+
+        if (limpiarEspacios(linea).empty()) {
+            std::cout << "Linea " << numeroLinea << " ignorada porque esta vacia." << std::endl;
+            ignoradas++;
+            continue;
+        }
+
+        Registro reg;
+        if (!parsearLinea(linea, reg)) {
+            std::cout << "Linea " << numeroLinea << " ignorada por formato invalido."
+                      << std::endl;
+            ignoradas++;
+            continue;
+        }
+
+        datos.push_back(reg);
+    }
+
+    archivo.close();
+
+    if (ignoradas > 0) {
+        std::cout << "Se ignoraron " << ignoradas << " lineas de " << numeroLinea
+                  << " en total." << std::endl;
+    }
+    return true;
+}
