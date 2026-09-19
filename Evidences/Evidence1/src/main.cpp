@@ -17,6 +17,29 @@
 const std::string RUTAS[2]   = {"data/log607-1.txt", "data/log607-2.txt"};
 const std::string NOMBRES[2] = {"log607-1.txt (desordenado)", "log607-2.txt (casi ordenado)"};
 
+// Los algoritmos que puede elegir el usuario. Los primeros siete son los de la
+// Act 1.5. El octavo es una variante de quick sort que sirve para comparar.
+const int NUM_ALGORITMOS = 8;
+const std::string ALGORITMOS[NUM_ALGORITMOS] = {
+    "Bubble sort", "Selection sort", "Insertion sort", "Merge sort",
+    "Quick sort (mediana de tres)", "Swap sort", "Shell sort",
+    "Quick sort (pivote al final)"
+};
+
+// Ejecuta el algoritmo que corresponde a la opcion del menu.
+void ejecutarAlgoritmo(int opcion, std::vector<Registro>& v) {
+    switch (opcion) {
+        case 1: bubbleSort(v);            break;
+        case 2: selectionSort(v);         break;
+        case 3: insertionSort(v);         break;
+        case 4: mergeSort(v);             break;
+        case 5: quickSort(v);             break;
+        case 6: swapSort(v);              break;
+        case 7: shellSort(v);             break;
+        case 8: quickSortPivoteFinal(v);  break;
+    }
+}
+
 // Imprime el menu principal.
 void mostrarMenu() {
     std::cout << "\n========================================" << std::endl;
@@ -70,10 +93,12 @@ int main() {
 
             // Submenu de algoritmos. En la Fase 4 se le agregan los demas.
             std::cout << "\nQue algoritmo quieres usar?" << std::endl;
-            std::cout << "1. Bubble sort" << std::endl;
+            for (int i = 0; i < NUM_ALGORITMOS; i++) {
+                std::cout << (i + 1) << ". " << ALGORITMOS[i] << std::endl;
+            }
             std::cout << "0. Regresar al menu" << std::endl;
 
-            int algoritmo = leerEntero("Algoritmo: ", 0, 1);
+            int algoritmo = leerEntero("Algoritmo: ", 0, NUM_ALGORITMOS);
             if (algoritmo == 0) {
                 continue;
             }
@@ -85,7 +110,7 @@ int main() {
             std::vector<Registro> copia = original;
 
             auto inicio = std::chrono::steady_clock::now();
-            bubbleSort(copia);
+            ejecutarAlgoritmo(algoritmo, copia);
             auto fin = std::chrono::steady_clock::now();
 
             double ms = std::chrono::duration<double, std::milli>(fin - inicio).count();
@@ -99,7 +124,7 @@ int main() {
             hayOrdenado = true;
 
             std::cout << "\n----------------------------------------" << std::endl;
-            std::cout << "Algoritmo: Bubble sort" << std::endl;
+            std::cout << "Algoritmo: " << ALGORITMOS[algoritmo - 1] << std::endl;
             std::cout << "Archivo:   " << archivoActual << std::endl;
             std::cout << "Registros: " << ordenados.size() << std::endl;
             std::cout << "Tiempo:    " << std::fixed << std::setprecision(3)
