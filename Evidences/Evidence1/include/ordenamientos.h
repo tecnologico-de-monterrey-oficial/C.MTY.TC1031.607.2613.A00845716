@@ -215,6 +215,41 @@ void shellSort(std::vector<T>& v) {
     }
 }
 
+// Particion que siempre toma el ultimo elemento como pivote, sin elegirlo.
+template <class T>
+int particionPivoteFinal(std::vector<T>& v, int izq, int der) {
+    T pivote = v[der];
+    int i = izq - 1;
+
+    for (int j = izq; j < der; j++) {
+        if (!(pivote < v[j])) {
+            std::swap(v[++i], v[j]);
+        }
+    }
+    std::swap(v[i + 1], v[der]);
+    return i + 1;
+}
+
+template <class T>
+void quickSortPivoteFinalRec(std::vector<T>& v, int izq, int der) {
+    if (izq < der) {
+        int p = particionPivoteFinal(v, izq, der);
+        quickSortPivoteFinalRec(v, izq, p - 1);
+        quickSortPivoteFinalRec(v, p + 1, der);
+    }
+}
+
+// Variante de quick sort que usa el ultimo elemento como pivote, sin mediana.
+// No es la version de la Act 1.5, esta sirve para comparar: con datos casi
+// ordenados el pivote resulta ser casi siempre el mayor del pedazo, la particion
+// queda de un lado con todo y del otro con nada, y el algoritmo se degrada.
+template <class T>
+void quickSortPivoteFinal(std::vector<T>& v) {
+    if (v.size() > 1) {
+        quickSortPivoteFinalRec(v, 0, (int)v.size() - 1);
+    }
+}
+
 // Revisa que el vector quedo de menor a mayor. Sirve para comprobar
 // que el algoritmo funciono, no es una opcion del usuario.
 template <class T>
