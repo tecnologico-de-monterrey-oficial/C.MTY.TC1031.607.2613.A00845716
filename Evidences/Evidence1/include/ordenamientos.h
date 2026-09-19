@@ -77,6 +77,56 @@ void insertionSort(std::vector<T>& v) {
     }
 }
 
+// Mezcla dos mitades que ya estan ordenadas, usando el vector auxiliar.
+// Cuando los dos elementos tienen la misma fecha se toma primero el de la
+// izquierda, y eso es lo que hace estable al merge sort.
+template <class T>
+void mezclar(std::vector<T>& v, std::vector<T>& aux, int izq, int medio, int der) {
+    for (int k = izq; k <= der; k++) {
+        aux[k] = v[k];
+    }
+
+    int i = izq;        // avanza por la mitad izquierda
+    int j = medio + 1;  // avanza por la mitad derecha
+    int k = izq;        // donde se va escribiendo el resultado
+
+    while (i <= medio && j <= der) {
+        // Solo se toma el de la derecha si es estrictamente menor.
+        if (aux[j] < aux[i]) {
+            v[k++] = aux[j++];
+        } else {
+            v[k++] = aux[i++];
+        }
+    }
+
+    while (i <= medio) v[k++] = aux[i++];
+    while (j <= der)   v[k++] = aux[j++];
+}
+
+// Parte recursiva: divide a la mitad, ordena cada mitad y las mezcla.
+template <class T>
+void mergeSortRec(std::vector<T>& v, std::vector<T>& aux, int izq, int der) {
+    if (izq >= der) {
+        return;
+    }
+    int medio = izq + (der - izq) / 2;
+    mergeSortRec(v, aux, izq, medio);
+    mergeSortRec(v, aux, medio + 1, der);
+    mezclar(v, aux, izq, medio, der);
+}
+
+// Merge sort. El vector auxiliar se crea una sola vez aqui y se pasa por
+// referencia a toda la recursion. Si se creara dentro de cada llamada,
+// el programa estaria reservando memoria miles de veces y tardaria mucho mas.
+template <class T>
+void mergeSort(std::vector<T>& v) {
+    if (v.size() <= 1) {
+        return;
+    }
+    std::vector<T> aux(v.size());
+    mergeSortRec(v, aux, 0, (int)v.size() - 1);
+}
+
 // Revisa que el vector quedo de menor a mayor. Sirve para comprobar
 // que el algoritmo funciono, no es una opcion del usuario.
 template <class T>
