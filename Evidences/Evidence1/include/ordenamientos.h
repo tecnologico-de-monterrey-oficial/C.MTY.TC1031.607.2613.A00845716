@@ -56,6 +56,27 @@ void selectionSort(std::vector<T>& v) {
     }
 }
 
+// Insertion sort: toma cada elemento y lo mete en su lugar dentro de la parte
+// que ya esta ordenada, recorriendo los demas a la derecha en vez de intercambiar.
+// Es estable porque el while usa menor estricto, asi que se detiene al topar con
+// un registro de la misma fecha en lugar de pasarle por encima.
+template <class T>
+void insertionSort(std::vector<T>& v) {
+    int n = (int)v.size();
+
+    for (int i = 1; i < n; i++) {
+        T actual = v[i];
+        int j = i - 1;
+
+        // Corre a la derecha todo lo que sea mayor que el elemento actual.
+        while (j >= 0 && actual < v[j]) {
+            v[j + 1] = v[j];
+            j--;
+        }
+        v[j + 1] = actual;
+    }
+}
+
 // Revisa que el vector quedo de menor a mayor. Sirve para comprobar
 // que el algoritmo funciono, no es una opcion del usuario.
 template <class T>
