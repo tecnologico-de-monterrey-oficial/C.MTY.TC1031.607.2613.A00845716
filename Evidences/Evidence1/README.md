@@ -56,23 +56,38 @@ El programa solo termina con la opción 0 o presionando Ctrl + D, que cierra la 
 
 Los mensajes de la consola no llevan acentos a propósito, para que se muestren correctamente en cualquier terminal, incluida la de Windows. Los comentarios del código sí los llevan.
 
-## Algoritmos de ordenamiento
+## Algoritmos disponibles
 
-El menú ofrece ocho opciones. Las siete primeras son los algoritmos vistos en clase hasta la Actividad 1.5, incluido Shell Sort, que fue el algoritmo extra de esa actividad:
+| # | Algoritmo | Mejor caso | Peor caso | Estable |
+|---|---|---|---|---|
+| 1 | Bubble sort (con bandera de salida temprana) | O(n) | O(n^2) | Sí |
+| 2 | Selection sort | O(n^2) | O(n^2) | No |
+| 3 | Insertion sort | O(n) | O(n^2) | Sí |
+| 4 | Merge sort | O(n log n) | O(n log n) | Sí |
+| 5 | Quick sort (pivote por mediana de tres) | O(n log n) | O(n^2) | No |
+| 6 | Swap sort | O(n^2) | O(n^2) | No |
+| 7 | Shell sort (saltos n/2, n/4, ..., 1) | O(n log n) | O(n^2) | No |
+| 8 | Quick sort con pivote al final (variante) | O(n log n) | O(n^2) | No |
 
-1. Bubble sort, con bandera que corta las pasadas cuando ya no hay intercambios.
-2. Selection sort.
-3. Insertion sort.
-4. Merge sort, con un solo vector auxiliar reutilizado en toda la recursión.
-5. Quick sort con pivote por mediana de tres, tal como se implementó en la Act 1.5.
-6. Swap sort.
-7. Shell sort, el algoritmo extra de la Act 1.5.
+Los algoritmos 1 a 7 son los vistos en clase hasta la Actividad 1.5. El 8 no es un algoritmo de clase, es una variante que se agregó para comparar. Usa el último elemento como pivote, lo que con datos casi ordenados lo acerca a su peor caso, y así se puede ver el problema que resuelve la mediana de tres del algoritmo 5.
 
-**La opción 8, Quick sort con pivote al final, no es un algoritmo visto en clase.** Es un experimento propio que se agregó únicamente para comparar: elige siempre el último elemento como pivote, sin mediana, y sirve para demostrar cómo quick sort se degrada con datos casi ordenados y por qué existe la mejora de la mediana de tres. No sustituye a la opción 5, que es la versión oficial de la actividad.
+Merge sort usa un solo vector auxiliar que se crea al inicio y se reutiliza en toda la recursión, en lugar de crear vectores nuevos en cada llamada.
 
-Todos los algoritmos son plantillas que ordenan de menor a mayor comparando únicamente con `<`, y reciben los registros a través del operador `<` definido sobre la fecha.
+Todos los algoritmos son plantillas que ordenan de menor a mayor comparando únicamente con `<`, a través del operador `<` definido sobre la fecha del registro.
 
-Insertion sort y merge sort son estables, es decir, dos registros con la misma fecha y hora conservan el orden en que venían en el archivo. Los demás no lo son.
+## Predicción y registro de corridas
+
+Antes de cada ordenamiento el programa pide una predicción (rápido, medio o lento) y una razón. Después de ordenar, clasifica el tiempo medido con estos umbrales y dice si coincidió con la predicción:
+
+- Rápido: menos de 10 ms
+- Medio: entre 10 y 60 ms
+- Lento: más de 60 ms
+
+Los umbrales se eligieron a partir de los tiempos observados en el equipo de desarrollo, de modo que ningún resultado quede justo en el límite entre dos categorías. En otra computadora los tiempos pueden variar.
+
+Cada corrida se agrega a `out/corridas.csv` con la fecha y hora, el algoritmo, el archivo, el número de registros, el tiempo, la complejidad, la predicción, el resultado, si coincidió y la razón. La opción 3 del menú muestra el historial en forma de tabla.
+
+La razón se guarda entre comillas dobles y las comillas que traiga adentro se escriben dobles, que es la regla del formato CSV. Así una razón con comas no rompe el archivo y Excel lo abre bien.
 
 ## Archivos de salida
 
