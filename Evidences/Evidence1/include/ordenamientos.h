@@ -34,6 +34,28 @@ void bubbleSort(std::vector<T>& v) {
     }
 }
 
+// Selection sort: busca el menor que falta y lo pone al inicio de lo que falta.
+// No es estable: al intercambiar, un registro puede brincar por encima de otro
+// con la misma fecha. Siempre recorre todo, asi que no le ayuda que los datos
+// ya vengan casi ordenados.
+template <class T>
+void selectionSort(std::vector<T>& v) {
+    int n = (int)v.size();
+
+    for (int i = 0; i < n - 1; i++) {
+        int posMinimo = i;
+        for (int j = i + 1; j < n; j++) {
+            if (v[j] < v[posMinimo]) {
+                posMinimo = j;
+            }
+        }
+        // Solo intercambia si el minimo no estaba ya en su lugar.
+        if (posMinimo != i) {
+            std::swap(v[i], v[posMinimo]);
+        }
+    }
+}
+
 // Revisa que el vector quedo de menor a mayor. Sirve para comprobar
 // que el algoritmo funciono, no es una opcion del usuario.
 template <class T>
