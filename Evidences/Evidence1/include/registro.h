@@ -12,8 +12,15 @@ struct Registro {
     std::string linea;  // la línea original completa
 };
 
+// Un registro es menor que otro si su fecha es anterior.
+// Así los algoritmos de ordenamiento pueden usar < directamente.
+inline bool operator<(const Registro& a, const Registro& b) {
+    return a.clave < b.clave;
+}
+
 std::string limpiarEspacios(const std::string& texto);
 int mesANumero(const std::string& mes);
 bool fechaAClave(const std::string& texto, long long& clave);
 bool parsearLinea(const std::string& linea, Registro& reg);
 bool leerArchivo(const std::string& ruta, std::vector<Registro>& datos);
+bool escribirArchivo(const std::string& ruta, const std::vector<Registro>& datos);
