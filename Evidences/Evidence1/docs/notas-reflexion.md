@@ -144,3 +144,46 @@ el mismo segundo, el archivo conserva el orden real en que llegaron. Un algoritm
 inestable puede invertirlos y hacerte creer que el ataque pasó antes que la alerta.
 Cuando el orden entre eventos del mismo segundo importa, hay que usar un algoritmo
 estable o desempatar con otro campo.
+
+## Fase 6, por qué la búsqueda usa dos binarias y no una
+
+La búsqueda binaria que vimos en clase contesta "¿está este valor y en qué posición?".
+Para un rango de fechas eso no sirve por dos razones.
+
+La primera es que las fechas del rango no tienen que existir en el archivo. Si busco
+desde `Jul 11 2025 00:00:00` y ese instante no está, una binaria normal contesta "no
+encontrado", cuando lo que necesito saber es en qué posición *empezaría*.
+
+La segunda es que los archivos traen 18 pares de registros con la misma fecha y hora.
+Una binaria normal se detiene en cuanto encuentra una coincidencia, y con un par puede
+caer en el segundo y comerse el primero. Lo probé: si el rango va de
+`Oct 02 2024 23:04:24` a esa misma fecha, el resultado correcto es 2 registros, no 1.
+
+La solución son dos búsquedas de frontera que nunca se detienen al encontrar:
+
+- El límite inferior busca la primera posición cuya fecha es mayor o igual al inicio.
+  Cuando encuentra una igual, no se detiene: sigue acotando hacia la izquierda por si
+  hay otra igual antes.
+- El límite superior busca la primera posición cuya fecha es estrictamente mayor al
+  fin. La única diferencia en el código es un `<=` en lugar de `<`, y ese signo de más
+  es lo que hace que se brinque todos los repetidos del final.
+
+El resultado es el bloque continuo entre las dos posiciones. Como es un pedazo seguido
+del vector ordenado, es imposible que se pierda o se repita un registro, y los
+duplicados de los extremos entran completos sin escribir ningún caso especial. El
+costo es O(log n) para encontrar los dos límites más O(k) para copiar los k resultados.
+
+Dos detalles chicos que importan más de lo que parece:
+
+- `alto` arranca en `size()`, no en `size() - 1`. Así la función puede regresar
+  `size()` para decir "ninguna fecha alcanza", que es lo que pasa con un rango
+  posterior al último registro. Con `size() - 1` el rango que cubre todo habría dado
+  6817 en vez de 6818.
+- El punto medio se calcula como `bajo + (alto - bajo) / 2` y no `(bajo + alto) / 2`,
+  para que la suma nunca se pase del límite del int. Con 6,818 registros da lo mismo,
+  pero es la forma correcta.
+
+Comprobé los ocho rangos de la tabla de respuestas y los ocho dieron exacto, incluidos
+el de duplicados en ambos extremos (2), el día con dos pares repetidos adentro (13) y
+el rango que cubre todo (6818). En los ocho, las líneas de `out/range607.txt`
+coinciden con el número que anunció la pantalla.
