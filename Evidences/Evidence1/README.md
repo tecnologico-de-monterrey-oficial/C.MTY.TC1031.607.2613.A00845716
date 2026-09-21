@@ -35,7 +35,7 @@ Por ejemplo `Oct 02 2024 23:04:24 10.14.47.219 Social engineering attacks`. El m
 
 Para ordenar y buscar, la fecha se convierte en un número con el formato AAAAMMDDhhmmss (en el ejemplo, 20241002230424), así comparar dos fechas es comparar dos números. El programa conserva la línea original completa para que los archivos de salida tengan exactamente el mismo formato que la entrada.
 
-Las líneas vacías o con formato inválido se reportan en pantalla con su número de línea y se ignoran, sin detener la lectura del resto del archivo. El archivo `data/prueba-malformada.txt` sirve para comprobar ese comportamiento: tiene 5 líneas, de las cuales 2 son registros válidos y 3 se reportan.
+Las líneas vacías o con formato inválido se reportan en pantalla con su número de línea y se ignoran, sin detener la lectura del resto del archivo. El archivo `data/prueba-malformada.txt` sirve para comprobar ese comportamiento: tiene 6 líneas, de las cuales 2 son registros válidos y 4 se reportan.
 
 Si el archivo no se puede abrir, el programa avisa con la ruta que intentó abrir y no se cierra de forma inesperada.
 
@@ -97,9 +97,17 @@ Cada corrida ordena una copia de los datos tal como vienen del archivo, de modo 
 
 Antes de guardar, el programa comprueba que el vector quedó de menor a mayor. Si la comprobación falla, avisa y no marca los datos como ordenados, así la búsqueda no puede correr sobre un resultado malo.
 
-## Búsqueda por rango y manejo de duplicados
+## Búsqueda por rango de fechas
 
-(Pendiente, Fase 6)
+La búsqueda se hace sobre los datos ya ordenados y solo está disponible después de ordenar. Se piden una fecha de inicio y una de fin en el formato `Mmm dd aaaa hh:mm:ss`, por ejemplo `Oct 02 2024 23:04:24`. Las fechas no tienen que existir en el archivo.
+
+El subrango se encuentra con dos búsquedas binarias. La primera localiza la posición inicial, que es la primera cuya fecha es mayor o igual a la fecha de inicio. La segunda localiza la posición final, que es la primera cuya fecha es estrictamente mayor a la fecha de fin. El resultado es el bloque continuo entre ambas posiciones. El costo es O(log n) para encontrar los límites más O(k) para copiar los k registros del rango.
+
+**Política de límites y de fechas repetidas.** El rango es inclusivo en los dos extremos. Si la fecha de inicio o la de fin coincide con uno o más registros, todos ellos se incluyen. Ninguna de las dos búsquedas se detiene al encontrar una coincidencia, sino que sigue acotando hasta la frontera, de modo que con fechas repetidas no se pierde ni se duplica ningún registro. Esto es relevante porque los archivos contienen 18 pares de registros con la misma fecha y hora.
+
+Si la fecha de inicio es posterior a la de fin, el programa lo reporta y vuelve a pedir ambas fechas, en lugar de intercambiarlas, para no asumir lo que el usuario quiso decir.
+
+Los resultados se muestran en pantalla y se guardan en `out/range607.txt` con el mismo formato de la entrada. Cuando hay más de 20 resultados, en pantalla se muestran los primeros y los últimos diez, y el archivo siempre contiene la lista completa. Si el rango no tiene registros, el archivo se genera vacío.
 
 ## Nota sobre nombres de archivos
 

@@ -13,6 +13,7 @@
 #include "entrada.h"
 #include "ordenamientos.h"
 #include "corridas.h"
+#include "busqueda.h"
 
 // Los dos archivos que se pueden analizar.
 const std::string RUTAS[2]   = {"data/log607-1.txt", "data/log607-2.txt"};
@@ -30,6 +31,20 @@ void ejecutarAlgoritmo(int opcion, std::vector<Registro>& v) {
         case 6: swapSort(v);              break;
         case 7: shellSort(v);             break;
         case 8: quickSortPivoteFinal(v);  break;
+    }
+}
+
+// Pide una fecha hasta que el usuario escriba una valida y regresa su clave.
+// Toda la validacion la hace fechaAClave, la misma que se usa al leer el archivo.
+long long leerFecha(const std::string& mensaje) {
+    while (true) {
+        std::string texto = leerTextoNoVacio(mensaje);
+        long long clave = 0;
+        if (fechaAClave(texto, clave)) {
+            return clave;
+        }
+        std::cout << "Fecha invalida. Usa el formato Mmm dd aaaa hh:mm:ss, "
+                  << "por ejemplo Oct 02 2024 23:04:24." << std::endl;
     }
 }
 
@@ -175,8 +190,65 @@ int main() {
                           << std::endl;
                 continue;
             }
-            std::cout << "Busqueda pendiente (Fase 6). Hay " << ordenados.size()
-                      << " registros ordenados listos." << std::endl;
+            std::cout << "\nHay " << ordenados.size() << " registros ordenados."
+                      << std::endl;
+            std::cout << "Las fechas que escribas no tienen que existir en el archivo."
+                      << std::endl;
+
+            // Se vuelven a pedir las dos fechas si el inicio queda despues del fin.
+            // Se decidio volver a pedirlas en vez de intercambiarlas, para no
+            // adivinar lo que el usuario quiso decir.
+            long long inicio = 0;
+            long long fin = 0;
+            while (true) {
+                inicio = leerFecha("Fecha de inicio: ");
+                fin    = leerFecha("Fecha de fin:    ");
+                if (inicio <= fin) {
+                    break;
+                }
+                std::cout << "La fecha de inicio no puede ser posterior a la de fin."
+                          << std::endl;
+            }
+
+            // Se busca sobre los datos ordenados, nunca sobre los originales.
+            std::vector<Registro> resultado;
+            buscarRango(ordenados, inicio, fin, resultado);
+
+            std::cout << "\nRegistros encontrados: " << resultado.size() << std::endl;
+
+            if (!resultado.empty()) {
+                std::cout << std::endl;
+                int total = (int)resultado.size();
+
+                if (total <= 20) {
+                    // Pocos resultados: se imprimen todos.
+                    for (const Registro& r : resultado) {
+                        std::cout << r.linea << std::endl;
+                    }
+                } else {
+                    // Muchos: solo los primeros y los ultimos diez, para no
+                    // llenar la pantalla. El archivo si lleva la lista completa.
+                    for (int i = 0; i < 10; i++) {
+                        std::cout << resultado[i].linea << std::endl;
+                    }
+                    std::cout << "... (" << (total - 20) << " registros mas) ..."
+                              << std::endl;
+                    for (int i = total - 10; i < total; i++) {
+                        std::cout << resultado[i].linea << std::endl;
+                    }
+                    std::cout << "\nLa lista completa esta en out/range607.txt."
+                              << std::endl;
+                }
+            } else {
+                std::cout << "No hay registros en ese rango. Revisa que las fechas "
+                          << "esten dentro del periodo que cubre el archivo." << std::endl;
+            }
+
+            // El archivo se escribe siempre, aunque el resultado este vacio.
+            // Un archivo vacio tambien es un resultado valido.
+            if (escribirArchivo("out/range607.txt", resultado)) {
+                std::cout << "Resultado guardado en out/range607.txt" << std::endl;
+            }
             continue;
         }
 

@@ -1,0 +1,13 @@
+Dec 16 2025 04:30:29 10.14.22.152 Application error
+Dec 16 2025 05:01:57 10.14.215.155 SQL injection
+Dec 16 2025 05:01:57 10.14.246.43 Anomalous User Activity
+Dec 16 2025 07:24:21 10.14.73.85 Suspicious IP Addresses
+Dec 16 2025 10:16:35 10.14.2.67 Application error
+Dec 16 2025 10:16:35 10.14.130.127 Suspicious IP Addresses
+Dec 16 2025 10:24:29 10.14.86.123 Application error
+Dec 16 2025 11:58:49 10.14.40.106 Encryption Failures
+Dec 16 2025 13:19:24 10.14.112.204 Cross-Site Scripting
+Dec 16 2025 15:54:49 10.14.230.185 Unauthorized Access Attempts
+Dec 16 2025 16:29:42 10.14.216.64 Data Exfiltration Attempts
+Dec 16 2025 20:35:56 10.14.72.88 Data corruption
+Dec 16 2025 22:11:28 10.14.128.28 Weak or easily guessable passwords
