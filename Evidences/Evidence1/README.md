@@ -25,6 +25,10 @@ Desde la carpeta `Evidences/Evidence1`:
     g++ -std=c++20 -O2 -Iinclude src/*.cpp -o build/app
     ./build/app
 
+También se puede usar el script `scripts/run.sh`, que compila y ejecuta el programa en un solo paso. Funciona desde cualquier carpeta, porque se mueve solo a `Evidence1` antes de compilar.
+
+El proyecto compila sin advertencias con `-Wall -Wextra`.
+
 ## Formato de los datos
 
 Cada línea del log tiene el formato:
@@ -55,6 +59,87 @@ Cada vez que se carga un archivo, los datos quedan sin ordenar, así que la bús
 El programa solo termina con la opción 0 o presionando Ctrl + D, que cierra la entrada.
 
 Los mensajes de la consola no llevan acentos a propósito, para que se muestren correctamente en cualquier terminal, incluida la de Windows. Los comentarios del código sí los llevan.
+
+### Ejemplo de sesión
+
+Ordenar log607-2.txt con insertion sort y después buscar los eventos del 16 de diciembre de 2025. Lo que escribe el usuario va después de cada dos puntos.
+
+```
+========================================
+  Analizador de logs 607
+========================================
+1. Ordenar un archivo
+2. Buscar por rango de fechas
+3. Ver historial de corridas
+0. Salir
+Opcion: 1
+
+Que archivo quieres usar?
+1. log607-1.txt (desordenado)
+2. log607-2.txt (casi ordenado)
+0. Regresar al menu
+Archivo: 2
+Se cargaron 6818 registros de log607-2.txt (casi ordenado).
+
+Que algoritmo quieres usar?
+1. Bubble sort
+2. Selection sort
+3. Insertion sort
+4. Merge sort
+5. Quick sort (mediana de tres)
+6. Swap sort
+7. Shell sort
+8. Quick sort (pivote al final, variante)
+0. Regresar al menu
+Algoritmo: 3
+
+Vas a ordenar 6818 registros de log607-2.txt (casi ordenado) con Insertion sort.
+
+Antes de ordenar, haz tu prediccion.
+Que tan rapido crees que sera este algoritmo con este archivo?
+1. Rapido (menos de 10 ms)
+2. Medio (entre 10 y 60 ms)
+3. Lento (mas de 60 ms)
+Prediccion: 1
+Por que? Menciona el tamano de los datos y que tan ordenado esta el archivo: el archivo ya viene casi ordenado, insertion deberia hacer pocos movimientos
+
+----------------------------------------
+Algoritmo:    Insertion sort
+Archivo:      log607-2.txt (casi ordenado)
+Registros:    6818
+Tiempo:       1.065 ms
+Complejidad:  mejor caso O(n), peor caso O(n^2)
+Estable:      si
+Prediccion:   rapido
+Resultado:    rapido
+Coincidio:    si
+Verificacion: datos ordenados correctamente
+Salida guardada en out/output607.txt
+Copia guardada en out/output607_log2.txt
+Corrida guardada en out/corridas.csv
+----------------------------------------
+```
+
+Después, con la opción 2:
+
+```
+Opcion: 2
+
+Hay 6818 registros ordenados.
+Los datos van de Sep 08 2024 00:22:43 a Sep 07 2026 23:50:40.
+Las fechas que escribas no tienen que existir en el archivo.
+Fecha de inicio: Dec 16 2025 00:00:00
+Fecha de fin:    Dec 16 2025 23:59:59
+
+Registros encontrados: 13
+
+Dec 16 2025 04:30:29 10.14.22.152 Application error
+Dec 16 2025 05:01:57 10.14.246.43 Anomalous User Activity
+Dec 16 2025 05:01:57 10.14.215.155 SQL injection
+...
+Resultado guardado en out/range607.txt
+Copia guardada en out/range607_log2.txt
+```
 
 ## Algoritmos disponibles
 
@@ -92,6 +177,8 @@ La razón se guarda entre comillas dobles y las comillas que traiga adentro se e
 ## Archivos de salida
 
 Después de cada ordenamiento el programa escribe `out/output607.txt` con los registros ordenados cronológicamente, en el mismo formato que el archivo de entrada. El archivo se sobrescribe en cada corrida, así que siempre contiene el resultado de la corrida más reciente.
+
+Además de `output607.txt` y `range607.txt`, que corresponden siempre a la operación más reciente, el programa guarda una copia identificada por archivo de entrada (`output607_log1.txt`, `output607_log2.txt`, `range607_log1.txt` y `range607_log2.txt`), de modo que queden disponibles los resultados de ambos archivos sin que uno sobrescriba al otro.
 
 Cada corrida ordena una copia de los datos tal como vienen del archivo, de modo que el tiempo medido no depende de las corridas anteriores. Los datos originales nunca se modifican.
 

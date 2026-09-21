@@ -64,6 +64,8 @@ int main() {
     std::vector<Registro> ordenados;  // resultado de la ultima corrida, es lo que usa la busqueda
     std::string archivoActual = "";   // cuál archivo está cargado
     std::string archivoCorto = "";    // el mismo nombre pero sin la descripción
+    int indiceArchivo = 0;            // 1 o 2, cuál archivo está cargado
+    int indiceArchivoOrdenado = 0;    // de cuál archivo salieron los datos ordenados
     bool hayOrdenado = false;         // se vuelve true en la Fase 3 al ordenar
 
     while (true) {
@@ -95,6 +97,7 @@ int main() {
 
             archivoActual = NOMBRES[cual - 1];
             archivoCorto = NOMBRES_CORTOS[cual - 1];
+            indiceArchivo = cual;
             // Los datos recien cargados vienen como estan en el archivo, sin ordenar.
             hayOrdenado = false;
 
@@ -137,11 +140,16 @@ int main() {
 
             if (!estaOrdenado(copia)) {
                 std::cout << "Error: el algoritmo no ordeno correctamente." << std::endl;
+                std::cout << "Los datos NO se marcaron como ordenados, asi que la "
+                          << "busqueda sigue bloqueada. Intenta con otro algoritmo."
+                          << std::endl;
                 continue;
             }
 
             ordenados = copia;
             hayOrdenado = true;
+            // La busqueda usa este indice, no el del ultimo archivo abierto.
+            indiceArchivoOrdenado = indiceArchivo;
 
             int resultado = clasificarTiempo(ms);
 
@@ -160,8 +168,14 @@ int main() {
                       << std::endl;
             std::cout << "Verificacion: datos ordenados correctamente" << std::endl;
 
-            if (escribirArchivo("out/output607.txt", ordenados)) {
+            // Ademas del archivo oficial se guarda una copia identificada, para que
+            // el resultado de un archivo no borre el del otro.
+            std::string copiaOrden = "out/output607_log"
+                                   + std::to_string(indiceArchivo) + ".txt";
+            if (escribirArchivo("out/output607.txt", ordenados)
+                && escribirArchivo(copiaOrden, ordenados)) {
                 std::cout << "Salida guardada en out/output607.txt" << std::endl;
+                std::cout << "Copia guardada en " << copiaOrden << std::endl;
             }
 
             Corrida corrida;
@@ -249,8 +263,12 @@ int main() {
 
             // El archivo se escribe siempre, aunque el resultado este vacio.
             // Un archivo vacio tambien es un resultado valido.
-            if (escribirArchivo("out/range607.txt", resultado)) {
+            std::string copiaRango = "out/range607_log"
+                                   + std::to_string(indiceArchivoOrdenado) + ".txt";
+            if (escribirArchivo("out/range607.txt", resultado)
+                && escribirArchivo(copiaRango, resultado)) {
                 std::cout << "Resultado guardado en out/range607.txt" << std::endl;
+                std::cout << "Copia guardada en " << copiaRango << std::endl;
             }
             continue;
         }
