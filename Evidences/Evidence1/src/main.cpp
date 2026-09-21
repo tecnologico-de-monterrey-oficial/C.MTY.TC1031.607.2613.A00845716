@@ -15,10 +15,21 @@
 #include "corridas.h"
 #include "busqueda.h"
 
-// Los dos archivos que se pueden analizar.
-const std::string RUTAS[2]   = {"data/log607-1.txt", "data/log607-2.txt"};
-const std::string NOMBRES[2] = {"log607-1.txt (desordenado)", "log607-2.txt (casi ordenado)"};
-const std::string NOMBRES_CORTOS[2] = {"log607-1.txt", "log607-2.txt"};
+// Los archivos que se pueden analizar. Los dos primeros son los logs de la
+// actividad. El tercero es un archivo chico con errores a proposito, para poder
+// mostrar como se comporta el programa con lineas vacias y fechas imposibles.
+const int NUM_ARCHIVOS = 3;
+const std::string RUTAS[NUM_ARCHIVOS] = {
+    "data/log607-1.txt", "data/log607-2.txt", "data/prueba-malformada.txt"
+};
+const std::string NOMBRES[NUM_ARCHIVOS] = {
+    "log607-1.txt (desordenado)",
+    "log607-2.txt (casi ordenado)",
+    "prueba-malformada.txt (archivo de prueba de manejo de errores)"
+};
+const std::string NOMBRES_CORTOS[NUM_ARCHIVOS] = {
+    "log607-1.txt", "log607-2.txt", "prueba-malformada.txt"
+};
 
 // Ejecuta el algoritmo que corresponde a la opcion del menu.
 void ejecutarAlgoritmo(int opcion, std::vector<Registro>& v) {
@@ -80,11 +91,12 @@ int main() {
         if (opcion == 1) {
             // Submenu para escoger cual de los dos archivos se carga.
             std::cout << "\nQue archivo quieres usar?" << std::endl;
-            std::cout << "1. " << NOMBRES[0] << std::endl;
-            std::cout << "2. " << NOMBRES[1] << std::endl;
+            for (int i = 0; i < NUM_ARCHIVOS; i++) {
+                std::cout << (i + 1) << ". " << NOMBRES[i] << std::endl;
+            }
             std::cout << "0. Regresar al menu" << std::endl;
 
-            int cual = leerEntero("Archivo: ", 0, 2);
+            int cual = leerEntero("Archivo: ", 0, NUM_ARCHIVOS);
             if (cual == 0) {
                 continue;
             }
@@ -170,12 +182,18 @@ int main() {
 
             // Ademas del archivo oficial se guarda una copia identificada, para que
             // el resultado de un archivo no borre el del otro.
-            std::string copiaOrden = "out/output607_log"
-                                   + std::to_string(indiceArchivo) + ".txt";
-            if (escribirArchivo("out/output607.txt", ordenados)
-                && escribirArchivo(copiaOrden, ordenados)) {
+            if (escribirArchivo("out/output607.txt", ordenados)) {
                 std::cout << "Salida guardada en out/output607.txt" << std::endl;
-                std::cout << "Copia guardada en " << copiaOrden << std::endl;
+
+                // La copia identificada solo se guarda para los dos logs de la
+                // actividad, no para el archivo de prueba de errores.
+                if (indiceArchivo <= 2) {
+                    std::string copiaOrden = "out/output607_log"
+                                           + std::to_string(indiceArchivo) + ".txt";
+                    if (escribirArchivo(copiaOrden, ordenados)) {
+                        std::cout << "Copia guardada en " << copiaOrden << std::endl;
+                    }
+                }
             }
 
             Corrida corrida;
@@ -263,12 +281,16 @@ int main() {
 
             // El archivo se escribe siempre, aunque el resultado este vacio.
             // Un archivo vacio tambien es un resultado valido.
-            std::string copiaRango = "out/range607_log"
-                                   + std::to_string(indiceArchivoOrdenado) + ".txt";
-            if (escribirArchivo("out/range607.txt", resultado)
-                && escribirArchivo(copiaRango, resultado)) {
+            if (escribirArchivo("out/range607.txt", resultado)) {
                 std::cout << "Resultado guardado en out/range607.txt" << std::endl;
-                std::cout << "Copia guardada en " << copiaRango << std::endl;
+
+                if (indiceArchivoOrdenado <= 2) {
+                    std::string copiaRango = "out/range607_log"
+                                           + std::to_string(indiceArchivoOrdenado) + ".txt";
+                    if (escribirArchivo(copiaRango, resultado)) {
+                        std::cout << "Copia guardada en " << copiaRango << std::endl;
+                    }
+                }
             }
             continue;
         }

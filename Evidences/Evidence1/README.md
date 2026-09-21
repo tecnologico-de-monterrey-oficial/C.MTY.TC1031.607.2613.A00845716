@@ -47,7 +47,7 @@ Si el archivo no se puede abrir, el programa avisa con la ruta que intentó abri
 
 Al ejecutar el programa aparece un menú con cuatro opciones:
 
-1. **Ordenar un archivo.** Permite elegir entre log607-1.txt (desordenado) y log607-2.txt (casi ordenado) y carga sus registros.
+1. **Ordenar un archivo.** Permite elegir entre log607-1.txt (desordenado), log607-2.txt (casi ordenado) y prueba-malformada.txt, y carga sus registros. El tercero es un archivo pequeño con errores a propósito (una línea vacía, una fecha imposible, texto que no es un registro y un 30 de febrero) que sirve para mostrar el manejo de errores de lectura dentro de la propia aplicación. Para ese archivo no se guardan las copias identificadas, porque no es uno de los logs de la actividad.
 2. **Buscar por rango de fechas.** Solo está disponible después de ordenar, porque la búsqueda binaria necesita datos ordenados.
 3. **Ver historial de corridas.**
 0. **Salir.**
