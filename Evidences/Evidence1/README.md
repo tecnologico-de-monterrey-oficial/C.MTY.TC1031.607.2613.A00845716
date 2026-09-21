@@ -10,13 +10,19 @@ Aplicación de consola en C++ que lee un log de eventos de seguridad, lo ordena 
 
 ## Estructura de carpetas
 
-- `data/` contiene los archivos de entrada log607-1.txt (desordenado) y log607-2.txt (casi ordenado).
-- `src/` contiene el código fuente (.cpp).
-- `include/` contiene los archivos de cabecera (.h) con las estructuras y los algoritmos.
+- `data/` contiene los archivos de entrada: log607-1.txt (desordenado), log607-2.txt (casi ordenado) y prueba-malformada.txt (archivo pequeño con errores a propósito, para probar el manejo de líneas inválidas).
+- `src/` contiene el código fuente (.cpp): main, registro, entrada, corridas y busqueda.
+- `include/` contiene los archivos de cabecera (.h). Aquí vive también `ordenamientos.h`, que es el único módulo sin su .cpp, porque los algoritmos son plantillas y una plantilla tiene que estar completa en el encabezado.
 - `build/` guarda el ejecutable compilado y no se sube al repositorio.
-- `out/` guarda las salidas que genera la app: output607.txt, range607.txt y corridas.csv.
-- `docs/` contiene EvidenciasPruebas.pdf y ReflexEvidencia1.pdf.
-- `scripts/` queda disponible para scripts de compilación o ejecución.
+- `out/` guarda las salidas que genera la app: output607.txt, range607.txt, sus copias por archivo de entrada y corridas.csv.
+- `docs/` contiene EvidenciasPruebas.pdf y ReflexEvidencia1.pdf, junto con sus versiones en Word.
+- `scripts/` contiene `run.sh`, que compila y ejecuta el programa en un paso, y `grafica.py`, un script de Python que lee `out/corridas.csv` y genera la gráfica comparativa de tiempos en escala logarítmica.
+
+El script de Python necesita matplotlib y se corre desde la carpeta `Evidence1`:
+
+    python3 scripts/grafica.py
+
+Genera la imagen de la gráfica a partir de las primeras 16 corridas del CSV, que son una por cada combinación de algoritmo y archivo.
 
 ## Compilación y ejecución
 
@@ -202,7 +208,21 @@ Las instrucciones mencionan en algunos puntos output608.txt, log608-1.txt y log6
 
 ## Política de uso de IA
 
-(Pendiente, se completa al final)
+En este proyecto se usaron herramientas de inteligencia artificial con reglas fijadas desde el inicio.
+
+**Lo que sí se permitió**
+
+- Usar Claude para desglosar las instrucciones de la actividad y organizar el trabajo por fases, de modo que cada fase terminara con algo que funcionara y con su propio commit.
+- Usar Claude para explicar conceptos, revisar errores y sugerir estructura de código.
+- Usar Copilot en VS Code para autocompletar funciones a partir de un comentario que describía lo que debían hacer.
+
+**Lo que no se permitió**
+
+- Aceptar código sin comprobarlo. Cada fase se verificó contra resultados esperados calculados de antemano: la cantidad de registros leídos, las salidas comparadas con `diff` entre algoritmos, y los conteos exactos de cada rango de búsqueda.
+- Cambiar los algoritmos vistos en clase por versiones "mejoradas". Se conservaron las implementaciones de la Actividad 1.5 tal como se hicieron ahí, incluido el quick sort con pivote por mediana de tres. La única variante agregada, el quick sort con pivote al final, está identificada como tal en el menú, en este README y en la reflexión, y existe solo para comparar.
+- Entregar algo que no se pudiera explicar. Todo el código de la entrega se repasó archivo por archivo antes de grabar el video.
+
+El detalle de los prompts usados, qué se modificó de cada sugerencia y los errores que cometió la IA están documentados en la reflexión individual.
 
 ## Video
 
