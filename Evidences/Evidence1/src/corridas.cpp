@@ -109,9 +109,11 @@ bool guardarCorrida(const Corrida& c, const std::string& ruta) {
                 << "prediccion,resultado,coincidio,razon\n";
     }
 
+    // El nombre del algoritmo puede traer comas, por ejemplo
+    // "Quick sort (pivote al final, variante)", asi que tambien va entrecomillado.
     archivo << fechaDeHoy() << ","
-            << c.algoritmo << ","
-            << c.archivo << ","
+            << comoCampoCSV(c.algoritmo) << ","
+            << comoCampoCSV(c.archivo) << ","
             << c.registros << ","
             << std::fixed << std::setprecision(3) << c.ms << ","
             << c.mejorCaso << ","

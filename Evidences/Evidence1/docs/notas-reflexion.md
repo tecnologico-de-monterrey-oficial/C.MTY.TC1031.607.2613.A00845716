@@ -187,3 +187,58 @@ Comprobé los ocho rangos de la tabla de respuestas y los ocho dieron exacto, in
 el de duplicados en ambos extremos (2), el día con dos pares repetidos adentro (13) y
 el rango que cubre todo (6818). En los ocho, las líneas de `out/range607.txt`
 coinciden con el número que anunció la pantalla.
+
+## Fase 8, mediciones definitivas
+
+Las 16 corridas finales se midieron en una sola sesión, compilando una vez con
+`-O2`, después de apagar el servidor de desarrollo que llevaba dos días corriendo.
+El cronómetro rodea solo la llamada al algoritmo.
+
+| Algoritmo | log607-1 (ms) | log607-2 (ms) | razón |
+|---|---|---|---|
+| Bubble sort | 105.697 | 0.290 | 364.47 |
+| Selection sort | 21.335 | 22.074 | 0.97 |
+| Insertion sort | 126.185 | 0.962 | 131.17 |
+| Merge sort | 3.891 | 3.032 | 1.28 |
+| Quick sort (mediana de tres) | 0.953 | 0.675 | 1.41 |
+| Swap sort | 87.424 | 15.488 | 5.64 |
+| Shell sort | 7.032 | 5.779 | 1.22 |
+| Quick sort (pivote al final) | 0.966 | 37.974 | 0.025 |
+
+### Lo que aprendí de mis propias predicciones
+
+De las 16 predicciones, 12 coincidieron y 4 no. Lo interesante es que las cuatro
+fallas son exactamente el mismo error: en selection sort en los dos archivos, en
+swap sort en el casi ordenado y en la variante de quick sort en el casi ordenado
+predije *lento* y salió *medio*.
+
+O sea que el razonamiento iba bien encaminado. Sí identifiqué cuáles iban a ser
+los tardados, porque son los O(n²). Lo que fallé fue el umbral: puse que lento
+era más de 60 ms y estos se quedaron entre 15 y 38 ms.
+
+La razón de fondo es la misma del hallazgo de insertion sort. Selection y swap
+hacen millones de comparaciones pero poquísimos movimientos, y comparar dos
+números `long long` es baratísimo comparado con copiar una línea de texto. Bubble
+e insertion, que sí pasan de 100 ms, son los que mueven datos todo el tiempo.
+
+La conclusión que me llevo es que contar operaciones no alcanza para estimar un
+tiempo real. Hay que saber cuánto cuesta cada operación con el tipo de dato que
+se está ordenando. Dos algoritmos que la teoría marca igual, ambos O(n²), pueden
+diferir cinco veces en tiempo solo por cómo mueven los datos.
+
+### Un bug que encontré al generar la gráfica
+
+Al leer `out/corridas.csv` con un parser de CSV de verdad, para armar la gráfica,
+se rompió: decía que faltaba una columna. El motivo era que el nombre
+`Quick sort (pivote al final, variante)` trae una coma y yo solo estaba poniendo
+entre comillas el campo de la razón, porque cuando escribí esa función la razón
+era el único campo con texto libre.
+
+El nombre con coma llegó después, en la Fase 5, cuando agregué la variante. O sea
+que el código estaba bien cuando se escribió y se rompió por un cambio posterior
+que no parecía tener nada que ver. Lo arreglé entrecomillando también el algoritmo
+y el archivo, y repetí las 16 corridas con el programa ya corregido.
+
+Vale la pena anotarlo porque es el tipo de error que no se ve a simple vista: el
+archivo se veía perfecto abriéndolo como texto, y solo un programa que lo leyera
+en serio lo detectaba.
