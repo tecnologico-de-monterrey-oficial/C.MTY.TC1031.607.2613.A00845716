@@ -189,7 +189,7 @@ void mostrarHistorial(const std::string& ruta) {
     }
 
     std::cout << "\n" << std::right << std::setw(2) << "#" << "  " << std::left
-              << std::setw(30) << "Algoritmo"
+              << std::setw(40) << "Algoritmo"
               << std::setw(15) << "Archivo"
               << std::right << std::setw(12) << "Tiempo (ms)" << "  "
               << std::left
@@ -205,7 +205,7 @@ void mostrarHistorial(const std::string& ruta) {
             continue;   // linea incompleta, se salta
         }
         std::cout << std::right << std::setw(2) << (i + 1) << "  " << std::left
-                  << std::setw(30) << c[1]
+                  << std::setw(40) << c[1]
                   << std::setw(15) << c[2]
                   << std::right << std::setw(12) << c[4] << "  "
                   << std::left
