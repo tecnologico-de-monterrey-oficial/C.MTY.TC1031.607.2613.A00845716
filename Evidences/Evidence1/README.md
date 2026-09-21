@@ -206,4 +206,8 @@ Las instrucciones mencionan en algunos puntos output608.txt, log608-1.txt y log6
 
 ## Video
 
-(Pendiente, Fase 9)
+Video explicativo: [ver video](https://youtu.be/5iGMwLNZImI)
+
+En el video se muestra la aplicación corriendo con insertion sort sobre los dos archivos de entrada, se explica la implementación de la búsqueda binaria por rango línea por línea, y se demuestra el manejo de fechas repetidas buscando un rango cuyos extremos caen en una fecha duplicada.
+
+El video incluye marcas de tiempo en su descripción para poder ir directo a cada sección.
