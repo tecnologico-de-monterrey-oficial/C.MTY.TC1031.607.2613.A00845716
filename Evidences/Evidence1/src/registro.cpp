@@ -207,7 +207,8 @@ bool escribirArchivo(const std::string& ruta, const std::vector<Registro>& datos
     std::ofstream archivo(ruta);
     if (!archivo.is_open()) {
         std::cout << "Error: no se pudo crear el archivo \"" << ruta << "\"." << std::endl;
-        std::cout << "Revisa que la carpeta exista." << std::endl;
+        std::cout << "Revisa que la carpeta out/ exista y que estes corriendo el "
+                  << "programa desde la carpeta Evidence1." << std::endl;
         return false;
     }
 

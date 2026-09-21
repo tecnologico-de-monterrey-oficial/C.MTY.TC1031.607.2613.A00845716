@@ -99,6 +99,8 @@ bool guardarCorrida(const Corrida& c, const std::string& ruta) {
     std::ofstream archivo(ruta, std::ios::app);
     if (!archivo.is_open()) {
         std::cout << "Error: no se pudo escribir en \"" << ruta << "\"." << std::endl;
+        std::cout << "Revisa que la carpeta out/ exista y que estes corriendo el "
+                  << "programa desde la carpeta Evidence1." << std::endl;
         return false;
     }
 
