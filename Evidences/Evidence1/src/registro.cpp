@@ -107,6 +107,27 @@ bool fechaAClave(const std::string& texto, long long& clave) {
     return true;
 }
 
+// Hace lo contrario de fechaAClave: toma 20241002230424 y regresa
+// "Oct 02 2024 23:04:24". Se usa para mostrarle al usuario el periodo
+// que cubre el archivo antes de pedirle las fechas de la busqueda.
+std::string claveATexto(long long clave) {
+    int seg  = (int)( clave % 100);
+    int min  = (int)((clave / 100) % 100);
+    int hora = (int)((clave / 10000) % 100);
+    int dia  = (int)((clave / 1000000) % 100);
+    int mes  = (int)((clave / 100000000) % 100);
+    int anio = (int)( clave / 10000000000LL);
+
+    // Los numeros de un digito llevan un cero adelante, igual que en el log.
+    auto dosDigitos = [](int n) {
+        std::string s = std::to_string(n);
+        return s.size() == 1 ? "0" + s : s;
+    };
+
+    return MESES[mes - 1] + " " + dosDigitos(dia) + " " + std::to_string(anio)
+         + " " + dosDigitos(hora) + ":" + dosDigitos(min) + ":" + dosDigitos(seg);
+}
+
 // Toma una linea del log, saca la fecha de los primeros 20 caracteres y
 // guarda la clave junto con la linea completa. Regresa false si la linea no sirve.
 bool parsearLinea(const std::string& linea, Registro& reg) {

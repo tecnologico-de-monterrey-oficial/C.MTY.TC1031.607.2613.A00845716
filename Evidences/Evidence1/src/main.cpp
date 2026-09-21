@@ -192,6 +192,9 @@ int main() {
             }
             std::cout << "\nHay " << ordenados.size() << " registros ordenados."
                       << std::endl;
+            std::cout << "Los datos van de " << claveATexto(ordenados.front().clave)
+                      << " a " << claveATexto(ordenados.back().clave) << "."
+                      << std::endl;
             std::cout << "Las fechas que escribas no tienen que existir en el archivo."
                       << std::endl;
 

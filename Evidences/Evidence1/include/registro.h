@@ -21,6 +21,7 @@ inline bool operator<(const Registro& a, const Registro& b) {
 std::string limpiarEspacios(const std::string& texto);
 int mesANumero(const std::string& mes);
 bool fechaAClave(const std::string& texto, long long& clave);
+std::string claveATexto(long long clave);
 bool parsearLinea(const std::string& linea, Registro& reg);
 bool leerArchivo(const std::string& ruta, std::vector<Registro>& datos);
 bool escribirArchivo(const std::string& ruta, const std::vector<Registro>& datos);

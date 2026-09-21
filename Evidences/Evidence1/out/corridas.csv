@@ -10,3 +10,5 @@ fecha,algoritmo,archivo,registros,tiempo_ms,mejor_caso,peor_caso,prediccion,resu
 2026-09-20 18:51:14,Merge sort,log607-1.txt,6818,6.452,O(n log n),O(n log n),rapido,rapido,si,"prueba"
 2026-09-20 18:51:22,Merge sort,log607-1.txt,6818,4.570,O(n log n),O(n log n),rapido,rapido,si,"prueba"
 2026-09-20 18:51:32,Merge sort,log607-1.txt,6818,4.084,O(n log n),O(n log n),rapido,rapido,si,"prueba"
+2026-09-20 18:52:01,Merge sort,log607-1.txt,6818,5.866,O(n log n),O(n log n),rapido,rapido,si,"prueba"
+2026-09-20 18:52:25,Merge sort,log607-1.txt,6818,5.362,O(n log n),O(n log n),rapido,rapido,si,"merge sort deberia ser rapido, no le afecta el desorden"
