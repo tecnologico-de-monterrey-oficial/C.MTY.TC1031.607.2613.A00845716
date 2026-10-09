@@ -59,9 +59,7 @@ public:
     friend ostream& operator<<(ostream& os, const DoublyLinkedList<U>& lista);
 };
 
-// ---------------------------------------------------------------------------
 // Funciones de apoyo (privadas)
-// ---------------------------------------------------------------------------
 
 // Lanza out_of_range si el índice no existe en la lista. O(1)
 template <typename T>
@@ -131,10 +129,7 @@ void DoublyLinkedList<T>::copiarDe(const DoublyLinkedList<T>& other) {
     }
 }
 
-// ---------------------------------------------------------------------------
 // Constructor de copia, destructor y operador =
-// ---------------------------------------------------------------------------
-
 // Constructor de copia: arranca vacía y copia nodo por nodo. O(n)
 template <typename T>
 DoublyLinkedList<T>::DoublyLinkedList(const DoublyLinkedList<T>& other)
@@ -164,9 +159,8 @@ DoublyLinkedList<T>& DoublyLinkedList<T>::operator=(const DoublyLinkedList<T>& o
     return *this;
 }
 
-// ---------------------------------------------------------------------------
+
 // Agregar
-// ---------------------------------------------------------------------------
 
 // Inserta al principio. O(1)
 template <typename T>
@@ -227,9 +221,7 @@ void DoublyLinkedList<T>::insert(int index, T data) {
     size++;
 }
 
-// ---------------------------------------------------------------------------
 // Borrar
-// ---------------------------------------------------------------------------
 
 // Borra la primera vez que aparece data. O(n)
 template <typename T>
@@ -280,9 +272,7 @@ void DoublyLinkedList<T>::clear() {
     size = 0;
 }
 
-// ---------------------------------------------------------------------------
 // Consultar y actualizar
-// ---------------------------------------------------------------------------
 
 // Regresa el dato de la posición index. O(n)
 template <typename T>
@@ -342,9 +332,7 @@ const T& DoublyLinkedList<T>::operator[](int index) const {
     return getNode(index)->data;
 }
 
-// ---------------------------------------------------------------------------
 // Ordenar, duplicar y quitar repetidos
-// ---------------------------------------------------------------------------
 
 // Junta dos cadenas ya ordenadas en una sola ordenada. O(a + b)
 // Solo usa next; los prev se arreglan al final de sort().
@@ -469,9 +457,7 @@ void DoublyLinkedList<T>::removeDuplicates() {
     }
 }
 
-// ---------------------------------------------------------------------------
 // Imprimir
-// ---------------------------------------------------------------------------
 
 // Escribe la lista de head a tail (con next) y de tail a head (con prev).
 // Si los prev estuvieran mal, la segunda línea no saldría al revés de la primera. O(n)
