@@ -31,6 +31,7 @@ public:
     void insertBack(const T& valor);
     void insertAfter(DNode<T>* nodo, const T& valor);
     bool remove(DNode<T>* nodo);
+    void clear();
 
     void printForward() const;
     void printBackward() const;
@@ -170,9 +171,10 @@ void DoublyLinkedList<T>::printBackward() const {
     std::cout << std::endl;
 }
 
-// Destructor: libera todos los nodos. O(n)
+// Deja la lista vacía, libera todos los nodos y marca ordenada = false,
+// porque una lista vacía ya no tiene un orden que recordar. O(n)
 template <typename T>
-DoublyLinkedList<T>::~DoublyLinkedList() {
+void DoublyLinkedList<T>::clear() {
     DNode<T>* aux = head;
     while (aux != nullptr) {
         // guardar el siguiente antes de borrar el actual
@@ -180,4 +182,14 @@ DoublyLinkedList<T>::~DoublyLinkedList() {
         delete aux;
         aux = siguiente;
     }
+    head = nullptr;
+    tail = nullptr;
+    count = 0;
+    ordenada = false;
+}
+
+// Destructor: libera todos los nodos. O(n)
+template <typename T>
+DoublyLinkedList<T>::~DoublyLinkedList() {
+    clear();
 }
