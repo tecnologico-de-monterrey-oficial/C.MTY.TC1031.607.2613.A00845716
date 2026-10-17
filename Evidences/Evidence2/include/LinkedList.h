@@ -28,6 +28,7 @@ public:
     void insertFront(const T& data);
     void insertBack(const T& data);
     bool removeFront(T& valor);
+    bool getFront(T& valor) const;
     int size() const { return count; }
     bool isEmpty() const { return count == 0; }
     void print() const;
@@ -79,6 +80,17 @@ bool LinkedList<T>::removeFront(T& valor) {
     }
     delete borrar;
     count--;
+    return true;
+}
+
+template <typename T>
+bool LinkedList<T>::getFront(T& valor) const {
+    // 1. si la lista está vacía no hay nada que ver
+    if (head == nullptr) {
+        return false;
+    }
+    // 2. copiar el dato del primero sin quitarlo de la lista
+    valor = head->data;
     return true;
 }
 
