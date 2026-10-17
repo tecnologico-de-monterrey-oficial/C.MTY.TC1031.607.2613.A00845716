@@ -27,4 +27,7 @@ public:
 
     int size() const { return lista.size(); }
     bool isEmpty() const { return lista.isEmpty(); }
+
+    // Imprime de arriba hacia abajo. O(n)
+    void print() const { lista.print(); }
 };

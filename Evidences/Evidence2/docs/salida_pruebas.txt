@@ -1,0 +1,268 @@
+Pruebas de estructuras - Evidencia 2
+Diego Contreras Alvarez, A00845716
+
+==================== LinkedList ====================
+
+Prueba 1. Lista vacia
+  [OK] isEmpty() es verdadero
+  [OK] size() = 0
+  removeFront: la lista esta vacia, no hay nada que quitar
+  [OK] removeFront sobre vacia regresa false y no cambia el valor
+  [OK] getFront sobre vacia regresa false
+
+Prueba 2. Un solo elemento
+  [OK] insertBack(10) en vacia deja size() = 1
+  [OK] el primero es 10
+  [OK] removeFront saca el 10
+  [OK] al quitar el unico nodo la lista queda vacia
+  [OK] insertFront(20) en vacia funciona despues de vaciarla
+
+Prueba 3. Insertar y quitar varias veces en los extremos
+  [OK] insertFront(0,1) e insertBack(2,3) dejan 4 elementos
+  Lista: 0-1-2-3
+  [OK] removeFront saca el 0
+  [OK] insertBack(4) y removeFront saca el 1
+  [OK] se sacan 2, 3 y 4 y queda vacia
+  removeFront: la lista esta vacia, no hay nada que quitar
+  [OK] insertBack(7) despues de vaciarla (tail se reinicio bien)
+
+Prueba 4. Imprimir
+  Lista vacia: 
+  Lista 5, 6, 7: 5-6-7
+
+==================== Stack ====================
+
+Prueba 5. Pila vacia
+  [OK] isEmpty() es verdadero
+  [OK] size() = 0
+  pop: la pila esta vacia
+  [OK] pop sobre vacia regresa false y no cambia el valor
+  peek: la pila esta vacia
+  [OK] peek sobre vacia regresa false y no cambia el valor
+
+Prueba 6. Un solo elemento
+  [OK] push(10) deja size() = 1
+  [OK] peek ve el 10
+  [OK] peek no saca el elemento
+  [OK] pop saca el 10
+  [OK] la pila queda vacia
+
+Prueba 7. Insertar y quitar varias veces en el extremo (arriba)
+  [OK] push(1,2,3) deja el 3 arriba
+  [OK] pop saca el 3 (el ultimo que entro)
+  [OK] push(4) y pop saca el 4
+  [OK] pop saca el 2
+  [OK] pop saca el 1 y queda vacia
+  pop: la pila esta vacia
+
+Prueba 8. Imprimir (de arriba hacia abajo)
+  Pila vacia: 
+  Despues de push 5, 6, 7: 7-6-5
+
+==================== Queue ====================
+
+Prueba 9. Fila vacia
+  [OK] isEmpty() es verdadero
+  [OK] size() = 0
+  dequeue: la fila esta vacia
+  [OK] dequeue sobre vacia regresa false y no cambia el valor
+  front: la fila esta vacia
+  [OK] front sobre vacia regresa false y no cambia el valor
+
+Prueba 10. Un solo elemento
+  [OK] enqueue(10) deja size() = 1
+  [OK] front ve el 10
+  [OK] front no saca el elemento
+  [OK] dequeue saca el 10
+  [OK] la fila queda vacia
+
+Prueba 11. Insertar y quitar varias veces en los extremos
+  [OK] enqueue(1,2,3) deja el 1 al frente
+  [OK] dequeue saca el 1 (el primero que entro)
+  [OK] enqueue(4) y dequeue saca el 2
+  [OK] dequeue saca el 3
+  [OK] dequeue saca el 4 y queda vacia
+  dequeue: la fila esta vacia
+  [OK] enqueue(8) despues de vaciarla funciona
+
+Prueba 12. Imprimir (del primero al ultimo)
+  Fila vacia: 
+  Despues de enqueue 5, 6, 7: 5-6-7
+
+==================== DoublyLinkedList ====================
+
+Prueba 13. Lista vacia
+  [OK] isEmpty() es verdadero
+  [OK] head y tail son nullptr
+  remove: la lista esta vacia, no hay nodo que quitar
+  [OK] insertAfter(nullptr, 5) no hace nada
+  [OK] ordenada empieza en false
+  Adelante: (vacia)
+  Atras:    (vacia)
+  [OK] la lista queda (vacia)
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 0
+
+Prueba 14. Un solo elemento
+  [OK] insertBack(10) en vacia: head y tail son el mismo nodo
+  Adelante: 10
+  Atras:    10
+  [OK] la lista queda 10
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 1
+  remove del unico nodo:
+  [OK] head y tail vuelven a nullptr
+  Adelante: (vacia)
+  Atras:    (vacia)
+  [OK] la lista queda (vacia)
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 0
+  [OK] insertFront(20) en vacia: head y tail son el mismo nodo
+  Adelante: 20
+  Atras:    20
+  [OK] la lista queda 20
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 1
+
+Prueba 15. insertAfter sobre el tail
+  insertAfter(tail, 30):
+  [OK] el 30 es el nuevo tail
+  Adelante: 20 30
+  Atras:    30 20
+  [OK] la lista queda 20 30
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 2
+  insertAfter(tail, 40):
+  Adelante: 20 30 40
+  Atras:    40 30 20
+  [OK] la lista queda 20 30 40
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 3
+
+Prueba 16. insertAfter en medio y en el head
+  insertAfter(head, 25):
+  Adelante: 20 25 30 40
+  Atras:    40 30 25 20
+  [OK] la lista queda 20 25 30 40
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 4
+  insertAfter(nodo del 30, 35):
+  Adelante: 20 25 30 35 40
+  Atras:    40 35 30 25 20
+  [OK] la lista queda 20 25 30 35 40
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 5
+
+Prueba 17. Insertar en los extremos varias veces
+  insertFront(10):
+  Adelante: 10 20 25 30 35 40
+  Atras:    40 35 30 25 20 10
+  [OK] la lista queda 10 20 25 30 35 40
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 6
+  insertBack(50):
+  Adelante: 10 20 25 30 35 40 50
+  Atras:    50 40 35 30 25 20 10
+  [OK] la lista queda 10 20 25 30 35 40 50
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 7
+
+Prueba 18. remove del head
+  remove(head):
+  [OK] el nuevo head no tiene a nadie atras
+  Adelante: 20 25 30 35 40 50
+  Atras:    50 40 35 30 25 20
+  [OK] la lista queda 20 25 30 35 40 50
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 6
+
+Prueba 19. remove del tail
+  remove(tail):
+  [OK] el nuevo tail no tiene a nadie adelante
+  Adelante: 20 25 30 35 40
+  Atras:    40 35 30 25 20
+  [OK] la lista queda 20 25 30 35 40
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 5
+
+Prueba 20. remove de un nodo en medio
+  remove(nodo del 30):
+  Adelante: 20 25 35 40
+  Atras:    40 35 25 20
+  [OK] la lista queda 20 25 35 40
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 4
+
+Prueba 21. Quitar todo desde los extremos hasta el unico nodo
+  remove(tail):
+  Adelante: 20 25 35
+  Atras:    35 25 20
+  [OK] la lista queda 20 25 35
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 3
+  remove(head):
+  Adelante: 25 35
+  Atras:    35 25
+  [OK] la lista queda 25 35
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 2
+  remove(head):
+  Adelante: 35
+  Atras:    35
+  [OK] la lista queda 35
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 1
+  remove del unico nodo (por tail):
+  Adelante: (vacia)
+  Atras:    (vacia)
+  [OK] la lista queda (vacia)
+  [OK] hacia atras sale al reves que hacia adelante
+  [OK] cada prev apunta al nodo de atras
+  [OK] el ultimo nodo recorrido es el tail
+  [OK] size() = 0
+  remove: la lista esta vacia, no hay nodo que quitar
+
+Prueba 22. Imprimir en los dos sentidos
+  Vacia, printForward:  (vacia)
+  Vacia, printBackward: (vacia)
+  1, 2, 3, printForward:  1 <-> 2 <-> 3
+  1, 2, 3, printBackward: 3 <-> 2 <-> 1
+
+Prueba 23. Atributo ordenada
+  [OK] setOrdenada(true) lo cambia a true
+  [OK] setOrdenada(false) lo regresa a false
+
+==================== Resumen ====================
+Revisiones: 140, fallas: 0

@@ -28,4 +28,7 @@ public:
 
     int size() const { return lista.size(); }
     bool isEmpty() const { return lista.isEmpty(); }
+
+    // Imprime del primero de la fila al último. O(n)
+    void print() const { lista.print(); }
 };
