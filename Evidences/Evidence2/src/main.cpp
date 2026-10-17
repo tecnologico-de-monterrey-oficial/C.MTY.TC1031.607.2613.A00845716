@@ -10,6 +10,7 @@
 #include <chrono>
 #include <cmath>
 #include <iomanip>
+#include <map>
 #include "registro.h"
 #include "entrada.h"
 #include "carga.h"
@@ -70,6 +71,37 @@ long long leerDia(const std::string& mensaje) {
 std::string diaATexto(long long dia) {
     // claveATexto regresa "Dec 16 2025 00:00:00"; se toman los primeros 11.
     return claveATexto(dia * 1000000).substr(0, 11);
+}
+
+// Imprime el valor (o los valores, si hay empate) que más se repite en un conteo.
+// Primero encuentra el máximo y después recorre otra vez para imprimir
+// todos los que tienen ese máximo.
+void imprimirMaximos(const std::string& titulo, const std::map<std::string, int>& conteo) {
+    int maximo = 0;
+    for (const auto& par : conteo) {
+        if (par.second > maximo) {
+            maximo = par.second;
+        }
+    }
+
+    int empatados = 0;
+    for (const auto& par : conteo) {
+        if (par.second == maximo) {
+            empatados++;
+        }
+    }
+
+    std::cout << "\n" << titulo << " (" << conteo.size() << " distintos)" << std::endl;
+    std::cout << "  Maximo: " << maximo << " registros";
+    if (empatados > 1) {
+        std::cout << ", empate entre " << empatados;
+    }
+    std::cout << std::endl;
+    for (const auto& par : conteo) {
+        if (par.second == maximo) {
+            std::cout << "  " << par.first << std::endl;
+        }
+    }
 }
 
 // Revisa la lista después de ordenar:
@@ -291,7 +323,31 @@ int main() {
         }
 
         if (opcion == 4) {
-            std::cout << "Estadisticas: pendiente." << std::endl;
+            // Esta opción no necesita que la lista esté ordenada: solo cuenta.
+            if (lista.isEmpty()) {
+                std::cout << "No hay registros cargados." << std::endl;
+                continue;
+            }
+
+            // Un solo recorrido de la lista llena los tres conteos.
+            std::map<std::string, int> porDia;
+            std::map<std::string, int> porDescripcion;
+            std::map<std::string, int> porIP;
+            for (DNode<Registro>* aux = lista.getHead(); aux != nullptr; aux = aux->next) {
+                const Registro& r = aux->data;
+                // El día se arma como en el log: "Sep 08 2024", con el cero adelante.
+                std::string dia = r.mes + " " + (r.dia < 10 ? "0" : "")
+                                + std::to_string(r.dia) + " " + std::to_string(r.anio);
+                porDia[dia]++;
+                porDescripcion[r.descripcion]++;
+                porIP[r.ip]++;
+            }
+
+            std::cout << "\nEstadisticas de " << archivoActual << " ("
+                      << lista.size() << " registros)" << std::endl;
+            imprimirMaximos("Dia con mas registros", porDia);
+            imprimirMaximos("Evento mas frecuente", porDescripcion);
+            imprimirMaximos("IP con mas registros", porIP);
             continue;
         }
     }
