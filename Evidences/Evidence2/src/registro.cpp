@@ -129,6 +129,18 @@ std::string claveATexto(long long clave) {
          + " " + dosDigitos(hora) + ":" + dosDigitos(min) + ":" + dosDigitos(seg);
 }
 
+// Toma "Dec 16 2025" y regresa 20251216. Para no repetir la validacion,
+// le pega la hora 00:00:00 y usa fechaAClave, que ya revisa el mes, que
+// el dia exista y los separadores. Despues le quita la hora a la clave.
+bool diaAClave(const std::string& texto, long long& dia) {
+    long long clave = 0;
+    if (!fechaAClave(limpiarEspacios(texto) + " 00:00:00", clave)) {
+        return false;
+    }
+    dia = clave / 1000000;
+    return true;
+}
+
 // Revisa que el texto parezca una IP: solo digitos y puntos, con al menos
 // un punto. Asi una palabra de la descripcion no se confunde con la IP.
 static bool pareceIP(const std::string& texto) {

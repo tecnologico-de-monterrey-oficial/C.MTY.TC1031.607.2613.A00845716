@@ -31,6 +31,15 @@ int mesANumero(const std::string& mes);
 bool fechaAClave(const std::string& texto, long long& clave);
 std::string claveATexto(long long clave);
 
+// Toma un día "Dec 16 2025", lo valida y arma su clave 20251216 (AAAAMMDD).
+// Regresa false si el día no sirve, y en ese caso no toca la clave.
+bool diaAClave(const std::string& texto, long long& dia);
+
+// El día de un registro en formato AAAAMMDD: 20251216143738 -> 20251216.
+inline long long diaDeRegistro(const Registro& reg) {
+    return reg.clave / 1000000;
+}
+
 // Separa una línea del log en sus campos y los guarda en reg.
 // Si la línea no sirve regresa false y deja en motivo la razón:
 // "linea vacia", "mes invalido", "fecha imposible", "hora invalida",

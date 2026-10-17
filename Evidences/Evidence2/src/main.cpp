@@ -14,6 +14,7 @@
 #include "entrada.h"
 #include "carga.h"
 #include "DoublyLinkedList.h"
+#include "Stack.h"
 
 // Los archivos que se pueden cargar. Los dos primeros son los logs de la
 // actividad. El tercero es un archivo chico con errores a proposito, para poder
@@ -49,6 +50,26 @@ int elegirYCargar(DoublyLinkedList<Registro>& lista) {
             return cual;
         }
     }
+}
+
+// Pide un día hasta que el usuario escriba uno válido y regresa su clave
+// AAAAMMDD. Viene de leerFecha de la Evidencia 1, pero sin la hora.
+long long leerDia(const std::string& mensaje) {
+    while (true) {
+        std::string texto = leerTextoNoVacio(mensaje);
+        long long dia = 0;
+        if (diaAClave(texto, dia)) {
+            return dia;
+        }
+        std::cout << "Dia invalido. Usa el formato Mmm dd aaaa, "
+                  << "por ejemplo Dec 16 2025." << std::endl;
+    }
+}
+
+// Convierte 20251216 en "Dec 16 2025" para mostrarlo.
+std::string diaATexto(long long dia) {
+    // claveATexto regresa "Dec 16 2025 00:00:00"; se toman los primeros 11.
+    return claveATexto(dia * 1000000).substr(0, 11);
 }
 
 // Revisa la lista después de ordenar:
@@ -102,6 +123,11 @@ int main() {
         return 0;
     }
     std::string archivoActual = NOMBRES[cual - 1];
+
+    // El último día que se buscó con la opción 2, como AAAAMMDD (0 = ninguno).
+    // Solo se guarda el día: los registros se quedan en la lista doble y no
+    // se copian a otra lista de resultados.
+    long long diaBuscado = 0;
 
     while (true) {
         mostrarMenu(archivoActual, lista.size());
@@ -181,12 +207,86 @@ int main() {
         }
 
         if (opcion == 2) {
-            std::cout << "Buscar por dia: pendiente." << std::endl;
+            // El corte temprano solo funciona si la lista está ordenada.
+            if (!lista.isOrdenada()) {
+                std::cout << "Primero ordena la lista con la opcion 1." << std::endl;
+                continue;
+            }
+            if (lista.isEmpty()) {
+                std::cout << "No hay registros cargados." << std::endl;
+                continue;
+            }
+            std::cout << "\nLos datos van de " << diaATexto(diaDeRegistro(lista.getHead()->data))
+                      << " a " << diaATexto(diaDeRegistro(lista.getTail()->data)) << "."
+                      << std::endl;
+            diaBuscado = leerDia("Dia a buscar (Mmm dd aaaa): ");
+
+            std::cout << "\nRegistros del " << diaATexto(diaBuscado) << ":" << std::endl;
+            int total = 0;
+            for (DNode<Registro>* aux = lista.getHead(); aux != nullptr; aux = aux->next) {
+                long long dia = diaDeRegistro(aux->data);
+                // Los días anteriores se saltan.
+                if (dia < diaBuscado) {
+                    continue;
+                }
+                // Corte temprano: como la lista está ordenada, en cuanto aparece
+                // un día mayor ya no puede haber más registros del día buscado,
+                // así que se deja de recorrer sin llegar hasta el tail.
+                if (dia > diaBuscado) {
+                    break;
+                }
+                std::cout << aux->data.linea << std::endl;
+                total++;
+            }
+
+            if (total == 0) {
+                std::cout << "No hay registros para ese dia." << std::endl;
+            } else {
+                std::cout << "\nTotal: " << total << " registros." << std::endl;
+            }
             continue;
         }
 
         if (opcion == 3) {
-            std::cout << "Mostrar descendente: pendiente." << std::endl;
+            if (!lista.isOrdenada()) {
+                std::cout << "Primero ordena la lista con la opcion 1." << std::endl;
+                continue;
+            }
+            // Si todavía no se ha buscado ningún día, se pide aquí.
+            if (diaBuscado == 0) {
+                diaBuscado = leerDia("Dia a mostrar (Mmm dd aaaa): ");
+            }
+
+            // Se recorre igual que en la opción 2, pero en vez de imprimir se
+            // hace push de un apuntador al registro. Así los registros no se
+            // duplican: siguen viviendo solo en la lista doble.
+            Stack<const Registro*> pila;
+            for (DNode<Registro>* aux = lista.getHead(); aux != nullptr; aux = aux->next) {
+                long long dia = diaDeRegistro(aux->data);
+                if (dia < diaBuscado) {
+                    continue;
+                }
+                // Corte temprano, igual que en la opción 2.
+                if (dia > diaBuscado) {
+                    break;
+                }
+                pila.push(&aux->data);
+            }
+
+            std::cout << "\nRegistros del " << diaATexto(diaBuscado)
+                      << " en orden descendente:" << std::endl;
+            if (pila.isEmpty()) {
+                std::cout << "No hay registros para ese dia." << std::endl;
+                continue;
+            }
+            // El último que entró fue el más tarde del día, así que al sacar
+            // de la pila salen del más reciente al más antiguo.
+            int total = pila.size();
+            const Registro* reg = nullptr;
+            while (pila.pop(reg)) {
+                std::cout << reg->linea << std::endl;
+            }
+            std::cout << "\nTotal: " << total << " registros." << std::endl;
             continue;
         }
 
