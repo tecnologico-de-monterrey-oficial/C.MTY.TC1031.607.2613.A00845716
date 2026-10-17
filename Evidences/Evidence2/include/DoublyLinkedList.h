@@ -16,7 +16,13 @@ private:
     DNode<T>* head;
     DNode<T>* tail;
     int count;
-    bool ordenada = false;   // se usa en la Fase 8
+    bool ordenada = false;   // true después de ordenar con mergeSort
+
+    // Partes del merge sort (ver mergeSort más abajo)
+    static DNode<T>* dividir(DNode<T>* inicio);
+    static DNode<T>* mezclar(DNode<T>* a, DNode<T>* b, long long& comparaciones);
+    static DNode<T>* mergeSortRec(DNode<T>* inicio, int profundidad,
+                                  long long& comparaciones, int& maxProfundidad);
 
 public:
     DoublyLinkedList() : head(nullptr), tail(nullptr), count(0) {}
@@ -43,6 +49,8 @@ public:
 
     bool isOrdenada() const { return ordenada; }
     void setOrdenada(bool valor) { ordenada = valor; }
+
+    void mergeSort(long long& comparaciones, int& maxProfundidad);
 };
 
 // Inserta al principio. O(1)
@@ -169,6 +177,119 @@ void DoublyLinkedList<T>::printBackward() const {
         }
     }
     std::cout << std::endl;
+}
+
+// ---------- Merge sort ----------
+// Se ordenan los nodos que ya existen: no se crean nodos nuevos ni se
+// copian registros, solo se cambian los apuntadores next y prev.
+
+// Parte la cadena que empieza en inicio en dos mitades y regresa el
+// primer nodo de la segunda mitad. La cadena tiene al menos 2 nodos.
+// lento avanza de 1 en 1 y rapido de 2 en 2: cuando rapido llega al
+// final, lento está a la mitad.
+//
+//   antes:   [1] <-> [2] <-> [3] <-> [4]
+//   después: [1] <-> [2]     [3] <-> [4]
+//                            ^ mitad
+template <typename T>
+DNode<T>* DoublyLinkedList<T>::dividir(DNode<T>* inicio) {
+    DNode<T>* lento = inicio;
+    DNode<T>* rapido = inicio->next;
+    while (rapido != nullptr && rapido->next != nullptr) {
+        lento = lento->next;
+        rapido = rapido->next->next;
+    }
+    DNode<T>* mitad = lento->next;
+    // cortar: la primera mitad ya no sigue y la segunda ya no tiene a nadie atrás
+    mitad->prev->next = nullptr;
+    mitad->prev = nullptr;
+    return mitad;
+}
+
+// Junta dos cadenas ya ordenadas en una sola ordenada y regresa su primer
+// nodo. Va enganchando los nodos que ya existen, uno por uno.
+// Cada comparación suma 1 al contador.
+template <typename T>
+DNode<T>* DoublyLinkedList<T>::mezclar(DNode<T>* a, DNode<T>* b,
+                                       long long& comparaciones) {
+    DNode<T>* inicio = nullptr;  // primer nodo del resultado
+    DNode<T>* ultimo = nullptr;  // último nodo que ya se enganchó
+
+    while (a != nullptr && b != nullptr) {
+        comparaciones++;
+        DNode<T>* tomado;
+        // Solo se toma el de b si es estrictamente menor. Si son iguales
+        // gana el de a (el de la izquierda), y eso hace estable al merge sort:
+        // dos registros con la misma fecha quedan en el orden del archivo.
+        if (!(b->data < a->data)) {
+            tomado = a;
+            a = a->next;
+        } else {
+            tomado = b;
+            b = b->next;
+        }
+        // enganchar el nodo tomado después del último, en los dos sentidos
+        tomado->prev = ultimo;
+        if (ultimo == nullptr) {
+            inicio = tomado;
+        } else {
+            ultimo->next = tomado;
+        }
+        ultimo = tomado;
+    }
+
+    // Lo que sobre de una de las dos cadenas ya está ordenado y sus prev
+    // ya están bien entre ellos; solo hay que pegar su primer nodo.
+    DNode<T>* resto = (a != nullptr) ? a : b;
+    if (ultimo == nullptr) {
+        inicio = resto;
+    } else {
+        ultimo->next = resto;
+        if (resto != nullptr) {
+            resto->prev = ultimo;
+        }
+    }
+    return inicio;
+}
+
+// Ordena la cadena que empieza en inicio y regresa su nuevo primer nodo.
+// profundidad dice en qué nivel de la recursión vamos (la primera llamada es 1).
+// Las cadenas de 0 o 1 nodo ya están ordenadas y no cuentan para la profundidad.
+template <typename T>
+DNode<T>* DoublyLinkedList<T>::mergeSortRec(DNode<T>* inicio, int profundidad,
+                                            long long& comparaciones,
+                                            int& maxProfundidad) {
+    if (inicio == nullptr || inicio->next == nullptr) {
+        return inicio;
+    }
+    if (profundidad > maxProfundidad) {
+        maxProfundidad = profundidad;
+    }
+    DNode<T>* mitad = dividir(inicio);
+    DNode<T>* izquierda = mergeSortRec(inicio, profundidad + 1, comparaciones, maxProfundidad);
+    DNode<T>* derecha = mergeSortRec(mitad, profundidad + 1, comparaciones, maxProfundidad);
+    return mezclar(izquierda, derecha, comparaciones);
+}
+
+// Ordena la lista de menor a mayor con merge sort. O(n log n) siempre.
+// Deja en comparaciones cuántas veces se compararon dos registros y en
+// maxProfundidad el nivel más hondo de la recursión (contando la primera
+// llamada como 1). Al final marca ordenada = true.
+template <typename T>
+void DoublyLinkedList<T>::mergeSort(long long& comparaciones, int& maxProfundidad) {
+    comparaciones = 0;
+    maxProfundidad = 0;
+    head = mergeSortRec(head, 1, comparaciones, maxProfundidad);
+
+    // El head quedó bien, pero tail sigue apuntando al nodo que era el
+    // último antes de ordenar. Hay que caminar hasta el final para fijarlo.
+    tail = head;
+    if (tail != nullptr) {
+        while (tail->next != nullptr) {
+            tail = tail->next;
+        }
+    }
+    ordenada = true;
 }
 
 // Deja la lista vacía, libera todos los nodos y marca ordenada = false,

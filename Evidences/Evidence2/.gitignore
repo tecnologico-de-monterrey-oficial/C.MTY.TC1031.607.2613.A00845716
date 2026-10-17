@@ -2,3 +2,6 @@ build/*
 !build/.gitkeep
 .DS_Store
 ~$*
+# El .gitignore de la raiz ignora *.out (ejecutables), pero este es el
+# archivo de salida que se entrega, asi que si se sube.
+!out/output608.out

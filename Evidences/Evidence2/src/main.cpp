@@ -7,6 +7,9 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <cmath>
+#include <iomanip>
 #include "registro.h"
 #include "entrada.h"
 #include "carga.h"
@@ -48,6 +51,34 @@ int elegirYCargar(DoublyLinkedList<Registro>& lista) {
     }
 }
 
+// Revisa la lista después de ordenar:
+// - hacia adelante, cada registro no es menor que el de atrás
+// - cada prev apunta al nodo de atrás, así que recorrerla hacia atrás
+//   da exactamente lo mismo pero al revés
+// - el último nodo es el tail y hacia atrás se cuentan los mismos nodos
+bool verificarOrden(const DoublyLinkedList<Registro>& lista) {
+    DNode<Registro>* anterior = nullptr;
+    int adelante = 0;
+    for (DNode<Registro>* aux = lista.getHead(); aux != nullptr; aux = aux->next) {
+        if (aux->prev != anterior) {
+            return false;
+        }
+        if (anterior != nullptr && aux->data < anterior->data) {
+            return false;
+        }
+        anterior = aux;
+        adelante++;
+    }
+    if (anterior != lista.getTail()) {
+        return false;
+    }
+    int atras = 0;
+    for (DNode<Registro>* aux = lista.getTail(); aux != nullptr; aux = aux->prev) {
+        atras++;
+    }
+    return adelante == lista.size() && atras == lista.size();
+}
+
 // Imprime el menú principal.
 void mostrarMenu(const std::string& archivoActual, int registros) {
     std::cout << "\n========================================" << std::endl;
@@ -83,7 +114,69 @@ int main() {
         }
 
         if (opcion == 1) {
-            std::cout << "Ordenar: pendiente." << std::endl;
+            if (lista.isOrdenada()) {
+                std::cout << "La lista ya esta ordenada, no hay nada que hacer." << std::endl;
+                continue;
+            }
+
+            int n = lista.size();
+            std::cout << "\nVas a ordenar " << n << " registros de " << archivoActual
+                      << " con Merge sort." << std::endl;
+
+            // La prediccion se pide antes de empezar a medir, para que el tiempo
+            // que tarda el usuario en escribir no cuente como tiempo del algoritmo.
+            std::cout << "\nAntes de ordenar, haz tu prediccion." << std::endl;
+            std::cout << "Cuantas comparaciones crees que hara?" << std::endl;
+            std::cout << "1. Del orden de n log n" << std::endl;
+            std::cout << "2. Del orden de n^2" << std::endl;
+            int prediccion = leerEntero("Prediccion: ", 1, 2);
+
+            // Se mide solo el ordenamiento.
+            long long comparaciones = 0;
+            int profundidad = 0;
+            auto inicio = std::chrono::steady_clock::now();
+            lista.mergeSort(comparaciones, profundidad);
+            auto fin = std::chrono::steady_clock::now();
+            double ms = std::chrono::duration<double, std::milli>(fin - inicio).count();
+
+            // Para saber a cual se parece mas, se comparan las comparaciones
+            // contra n log2 n y contra n^2 / 2, y se toma la mas cercana.
+            double nLogN = (n > 1) ? n * std::log2((double)n) : 0.0;
+            double nCuadradaMedios = (double)n * n / 2.0;
+            int resultado = 1;
+            if (std::fabs(comparaciones - nCuadradaMedios) < std::fabs(comparaciones - nLogN)) {
+                resultado = 2;
+            }
+            std::string nombres[3] = {"", "n log n", "n^2"};
+
+            std::cout << "\n----------------------------------------" << std::endl;
+            std::cout << "Algoritmo:      Merge sort sobre la lista doble" << std::endl;
+            std::cout << "Archivo:        " << archivoActual << std::endl;
+            std::cout << "n:              " << n << std::endl;
+            std::cout << "Tiempo:         " << std::fixed << std::setprecision(3)
+                      << ms << " ms" << std::endl;
+            std::cout << "Comparaciones:  " << comparaciones << std::endl;
+            std::cout << "  n log2 n:     " << std::setprecision(0) << nLogN << std::endl;
+            std::cout << "  n^2 / 2:      " << nCuadradaMedios << std::endl;
+            std::cout << "Profundidad:    " << profundidad
+                      << " (la primera llamada cuenta como 1)" << std::endl;
+            std::cout << "Prediccion:     " << nombres[prediccion] << std::endl;
+            std::cout << "Resultado:      " << nombres[resultado] << std::endl;
+            std::cout << "Coincidio:      " << (prediccion == resultado ? "si" : "no")
+                      << std::endl;
+            std::cout << std::defaultfloat;
+
+            if (verificarOrden(lista)) {
+                std::cout << "Verificacion:   ordenada, y hacia atras sale exactamente al reves"
+                          << std::endl;
+            } else {
+                std::cout << "Error: la lista no quedo bien ordenada o enlazada." << std::endl;
+            }
+
+            if (escribirArchivo("out/output608.out", lista)) {
+                std::cout << "Salida guardada en out/output608.out" << std::endl;
+            }
+            std::cout << "----------------------------------------" << std::endl;
             continue;
         }
 

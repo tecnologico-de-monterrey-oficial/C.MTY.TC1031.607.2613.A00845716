@@ -3,7 +3,7 @@
 
 // Carga de un archivo de log: archivo -> Fila -> lista doble.
 // El ciclo de lectura viene de leerArchivo de la Evidencia 1, pero ahora
-// está partido en dos etapas.
+// está partido en dos etapas. También escribe la lista en un archivo.
 
 #include "carga.h"
 #include "Queue.h"
@@ -62,5 +62,26 @@ bool cargarArchivo(const std::string& ruta, DoublyLinkedList<Registro>& lista) {
 
     std::cout << "Registros cargados: " << cargados
               << ". Lineas omitidas: " << omitidas << "." << std::endl;
+    return true;
+}
+
+// Recorre la lista de head a tail y escribe la linea original de cada nodo.
+// Viene de escribirArchivo de la Evidencia 1, pero ahora recorre la lista
+// en vez de un vector. Se escribe la linea tal cual para que la salida
+// tenga el mismo formato que la entrada.
+bool escribirArchivo(const std::string& ruta, const DoublyLinkedList<Registro>& lista) {
+    std::ofstream archivo(ruta);
+    if (!archivo.is_open()) {
+        std::cout << "Error: no se pudo crear el archivo \"" << ruta << "\"." << std::endl;
+        std::cout << "Revisa que la carpeta out/ exista y que estes corriendo el "
+                  << "programa desde la carpeta Evidence2." << std::endl;
+        return false;
+    }
+
+    for (DNode<Registro>* aux = lista.getHead(); aux != nullptr; aux = aux->next) {
+        archivo << aux->data.linea << '\n';
+    }
+
+    archivo.close();
     return true;
 }
