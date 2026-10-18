@@ -63,7 +63,7 @@ long long leerDia(const std::string& mensaje) {
             return dia;
         }
         std::cout << "Dia invalido. Usa el formato Mmm dd aaaa, "
-                  << "por ejemplo Dec 16 2025." << std::endl;
+        << "por ejemplo Dec 16 2025." << std::endl;
     }
 }
 
@@ -137,7 +137,7 @@ void mostrarMenu(const std::string& archivoActual, int registros) {
     std::cout << "\n========================================" << std::endl;
     std::cout << "  Analizador de logs - Evidencia 2" << std::endl;
     std::cout << "  Archivo: " << archivoActual << " (" << registros
-              << " registros)" << std::endl;
+    << " registros)" << std::endl;
     std::cout << "========================================" << std::endl;
     std::cout << "1. Ordenar" << std::endl;
     std::cout << "2. Buscar por dia" << std::endl;
@@ -179,7 +179,7 @@ int main() {
 
             int n = lista.size();
             std::cout << "\nVas a ordenar " << n << " registros de " << archivoActual
-                      << " con Merge sort." << std::endl;
+            << " con Merge sort." << std::endl;
 
             // La prediccion se pide antes de empezar a medir, para que el tiempo
             // que tarda el usuario en escribir no cuente como tiempo del algoritmo.
@@ -212,21 +212,21 @@ int main() {
             std::cout << "Archivo:        " << archivoActual << std::endl;
             std::cout << "n:              " << n << std::endl;
             std::cout << "Tiempo:         " << std::fixed << std::setprecision(3)
-                      << ms << " ms" << std::endl;
+            << ms << " ms" << std::endl;
             std::cout << "Comparaciones:  " << comparaciones << std::endl;
             std::cout << "  n log2 n:     " << std::setprecision(0) << nLogN << std::endl;
             std::cout << "  n^2 / 2:      " << nCuadradaMedios << std::endl;
             std::cout << "Profundidad:    " << profundidad
-                      << " (la primera llamada cuenta como 1)" << std::endl;
+            << " (la primera llamada cuenta como 1)" << std::endl;
             std::cout << "Prediccion:     " << nombres[prediccion] << std::endl;
             std::cout << "Resultado:      " << nombres[resultado] << std::endl;
             std::cout << "Coincidio:      " << (prediccion == resultado ? "si" : "no")
-                      << std::endl;
+            << std::endl;
             std::cout << std::defaultfloat;
 
             if (verificarOrden(lista)) {
                 std::cout << "Verificacion:   ordenada, y hacia atras sale exactamente al reves"
-                          << std::endl;
+                << std::endl;
             } else {
                 std::cout << "Error: la lista no quedo bien ordenada o enlazada." << std::endl;
             }
@@ -249,8 +249,8 @@ int main() {
                 continue;
             }
             std::cout << "\nLos datos van de " << diaATexto(diaDeRegistro(lista.getHead()->data))
-                      << " a " << diaATexto(diaDeRegistro(lista.getTail()->data)) << "."
-                      << std::endl;
+                << " a " << diaATexto(diaDeRegistro(lista.getTail()->data)) << "."
+                << std::endl;
             diaBuscado = leerDia("Dia a buscar (Mmm dd aaaa): ");
 
             std::cout << "\nRegistros del " << diaATexto(diaBuscado) << ":" << std::endl;
@@ -306,7 +306,7 @@ int main() {
             }
 
             std::cout << "\nRegistros del " << diaATexto(diaBuscado)
-                      << " en orden descendente:" << std::endl;
+                        << " en orden descendente:" << std::endl;
             if (pila.isEmpty()) {
                 std::cout << "No hay registros para ese dia." << std::endl;
                 continue;
@@ -344,7 +344,7 @@ int main() {
             }
 
             std::cout << "\nEstadisticas de " << archivoActual << " ("
-                      << lista.size() << " registros)" << std::endl;
+                        << lista.size() << " registros)" << std::endl;
             imprimirMaximos("Dia con mas registros", porDia);
             imprimirMaximos("Evento mas frecuente", porDescripcion);
             imprimirMaximos("IP con mas registros", porIP);

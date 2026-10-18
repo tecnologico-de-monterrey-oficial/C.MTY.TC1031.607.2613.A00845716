@@ -26,7 +26,7 @@ int fallas = 0;      // cuántas salieron mal
 // Escribe el encabezado de cada estructura.
 void seccion(const std::string& nombre) {
     std::cout << std::endl << "==================== " << nombre
-              << " ====================" << std::endl;
+            << " ====================" << std::endl;
 }
 
 // Escribe el título de una prueba con su número.

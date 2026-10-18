@@ -22,7 +22,7 @@ private:
     static DNode<T>* dividir(DNode<T>* inicio);
     static DNode<T>* mezclar(DNode<T>* a, DNode<T>* b, long long& comparaciones);
     static DNode<T>* mergeSortRec(DNode<T>* inicio, int profundidad,
-                                  long long& comparaciones, int& maxProfundidad);
+    long long& comparaciones, int& maxProfundidad);
 
 public:
     DoublyLinkedList() : head(nullptr), tail(nullptr), count(0) {}
@@ -211,7 +211,7 @@ DNode<T>* DoublyLinkedList<T>::dividir(DNode<T>* inicio) {
 // Cada comparación suma 1 al contador.
 template <typename T>
 DNode<T>* DoublyLinkedList<T>::mezclar(DNode<T>* a, DNode<T>* b,
-                                       long long& comparaciones) {
+    long long& comparaciones) {
     DNode<T>* inicio = nullptr;  // primer nodo del resultado
     DNode<T>* ultimo = nullptr;  // último nodo que ya se enganchó
 

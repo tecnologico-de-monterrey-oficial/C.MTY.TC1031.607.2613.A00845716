@@ -29,7 +29,7 @@ int leerEntero(const std::string& mensaje, int min, int max) {
 
         if (texto.empty()) {
             std::cout << "Entrada invalida. Escribe un numero entre " << min
-                      << " y " << max << "." << std::endl;
+            << " y " << max << "." << std::endl;
             continue;
         }
 
@@ -43,21 +43,21 @@ int leerEntero(const std::string& mensaje, int min, int max) {
         }
         if (!soloDigitos) {
             std::cout << "Entrada invalida. Escribe un numero entre " << min
-                      << " y " << max << "." << std::endl;
+            << " y " << max << "." << std::endl;
             continue;
         }
 
         // Un numero de mas de 9 digitos no cabe en un int y haria que stoi truene.
         if (texto.size() > 9) {
             std::cout << "Ese numero es demasiado grande. Escribe un numero entre "
-                      << min << " y " << max << "." << std::endl;
+            << min << " y " << max << "." << std::endl;
             continue;
         }
 
         int valor = std::stoi(texto);
         if (valor < min || valor > max) {
             std::cout << "Entrada invalida. Escribe un numero entre " << min
-                      << " y " << max << "." << std::endl;
+            << " y " << max << "." << std::endl;
             continue;
         }
 

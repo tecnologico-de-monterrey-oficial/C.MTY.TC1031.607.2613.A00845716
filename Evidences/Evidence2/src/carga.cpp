@@ -15,7 +15,7 @@ bool cargarArchivo(const std::string& ruta, DoublyLinkedList<Registro>& lista) {
     if (!archivo.is_open()) {
         std::cout << "Error: no se pudo abrir el archivo \"" << ruta << "\"." << std::endl;
         std::cout << "Revisa que exista y que lo estes corriendo desde la carpeta Evidence2."
-                  << std::endl;
+        << std::endl;
         return false;
     }
 
@@ -61,7 +61,7 @@ bool cargarArchivo(const std::string& ruta, DoublyLinkedList<Registro>& lista) {
     }
 
     std::cout << "Registros cargados: " << cargados
-              << ". Lineas omitidas: " << omitidas << "." << std::endl;
+    << ". Lineas omitidas: " << omitidas << "." << std::endl;
     return true;
 }
 
@@ -74,7 +74,7 @@ bool escribirArchivo(const std::string& ruta, const DoublyLinkedList<Registro>& 
     if (!archivo.is_open()) {
         std::cout << "Error: no se pudo crear el archivo \"" << ruta << "\"." << std::endl;
         std::cout << "Revisa que la carpeta out/ exista y que estes corriendo el "
-                  << "programa desde la carpeta Evidence2." << std::endl;
+        << "programa desde la carpeta Evidence2." << std::endl;
         return false;
     }
 
