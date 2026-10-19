@@ -4,6 +4,9 @@
 **Matrícula:** A00845716
 **Curso:** Programación de Estructuras de Datos y Algoritmos Fundamentales
 
+https://youtu.be/SsRv5kagvJI
+
+
 ## Nota sobre los nombres de archivos
 
 Hay tres detalles de nombres que conviene aclarar desde el inicio:
